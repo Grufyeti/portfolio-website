@@ -1,0 +1,86 @@
+body {
+  background: linear-gradient(315deg, #65005e 3%, #3c84ce 38%, #30eee2 68%, #ff1919 98%) 0 0 / 400% 400% fixed;
+  margin: auto;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  animation: 15s infinite gradient;
+  overflow: auto;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0 0;
+  }
+
+  50% {
+    background-position: 100% 100%;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.wave {
+  opacity: .8;
+  z-index: -1;
+  background: #ffffff40;
+  border-radius: 1000% 1000% 0 0;
+  width: 200%;
+  height: 12em;
+  animation: 10s linear -3s infinite wave;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  transform: translate3d(0, 0, 0);
+}
+
+.wave:nth-of-type(2) {
+  opacity: .8;
+  animation: 18s linear infinite reverse wave;
+  bottom: -1.25em;
+}
+
+.wave:nth-of-type(3) {
+  opacity: .9;
+  animation: 20s -1s infinite reverse wave;
+  bottom: -2.5em;
+}
+
+@keyframes wave {
+  2% {
+    transform: translateX(1px);
+  }
+
+  25% {
+    transform: translateX(-25%);
+  }
+
+  50% {
+    transform: translateX(-50%);
+  }
+
+  75% {
+    transform: translateX(-25%);
+  }
+
+  100% {
+    transform: translateX(1px);
+  }
+}
+
+.firsttextbox {
+  text-align: center;
+  color: #302525b3;
+  z-index: 1;
+  background-color: #ff000020;
+  border: .3em solid #2220204d;
+  border-radius: 2em;
+  align-items: center;
+  width: 35%;
+  height: 35%;
+  font-size: 1em;
+  font-weight: bold;
+  display: flex;
+  position: absolute;
+}
+/*# sourceMappingURL=portfilio.9f367d21.css.map */
