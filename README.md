@@ -1,6 +1,6 @@
 # Portfolio Website
 
-React/Vite-Onepage für eine moderne Portfolio- bzw. Freelancer-Website.
+React/Vite-Onepage fuer eine moderne Portfolio- bzw. Freelancer-Website.
 
 ## Tech Stack
 
@@ -32,13 +32,17 @@ npm run preview
 
 ```text
 .
-├── index.html
-├── package.json
-├── vite.config.js
-└── src
-    ├── App.jsx
-    ├── main.jsx
-    └── styles.css
+|- index.html
+|- package.json
+|- vite.config.js
+|- public
+|  |- og-image.svg
+|  |- robots.txt
+|  `- sitemap.xml
+`- src
+   |- App.jsx
+   |- main.jsx
+   `- styles.css
 ```
 
 ## Wichtige Dateien
@@ -46,11 +50,13 @@ npm run preview
 - `src/App.jsx`: Inhalte, Sections, Projektdaten, Kontakttexte
 - `src/styles.css`: komplettes Layout, Farben, Typografie und Responsive-Verhalten
 - `src/main.jsx`: React-Einstiegspunkt
-- `index.html`: HTML-Template und Meta-Tags
+- `index.html`: HTML-Template, Meta-Tags und strukturierte Daten
+- `public/robots.txt`: Crawling-Freigabe fuer Suchmaschinen
+- `public/sitemap.xml`: Sitemap fuer die Domain
 
 ## Inhaltlich anpassen
 
-Die meisten inhaltlichen Änderungen passieren in `src/App.jsx`:
+Die meisten inhaltlichen Aenderungen passieren in `src/App.jsx`:
 
 - `profile`
 - `services`

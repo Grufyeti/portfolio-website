@@ -7,7 +7,7 @@ const profile = {
   phone: '+43 650 411 6441',
   github: 'https://github.com/Grufyeti',
   githubHandle: 'Grufyeti',
-  location: 'DACH-Raum, remote & nach Absprache vor Ort',
+  location: 'Wiener Neustadt, Niederösterreich, remote & nach Absprache vor Ort',
   responseNote: 'Antwort per Mail, Telefon oder kurzer Abstimmung.',
 };
 
@@ -302,6 +302,11 @@ const faqItems = [
       'Ja. Ich unterstütze bei kleineren Homelab- und Self-Hosting-Setups, Reverse Proxy, Diensten, Dashboards und allgemeinen technischen Fragen. Das kann remote per Call oder bei passenden Projekten auch vor Ort stattfinden.',
   },
   {
+    question: 'Arbeitest du auch für Kunden in Wiener Neustadt und Umgebung?',
+    answer:
+      'Ja. Ich arbeite remote, unterstütze aber auch gezielt Kunden aus Wiener Neustadt und Umgebung, wenn eine lokale Zusammenarbeit sinnvoll ist. Gerade für kleinere Unternehmen, Selbstständige und Betriebe ist das oft praktisch.',
+  },
+  {
     question: 'Müssen Texte und Inhalte schon komplett fertig sein?',
     answer:
       'Nein. Eine gute Website entsteht oft gemeinsam aus Struktur, Prioritäten und klarer Nutzenkommunikation. Bestehende Inhalte können überarbeitet, verdichtet und in eine bessere Form gebracht werden.',
@@ -384,7 +389,8 @@ function App() {
             </h1>
             <p className="hero-sub">
               Ich entwickle professionelle Websites für kleine Unternehmen,
-              Selbstständige und lokale Betriebe und unterstütze zusätzlich bei
+              Selbstständige und lokale Betriebe in Wiener Neustadt,
+              Niederösterreich und im DACH-Raum und unterstütze zusätzlich bei
               Hosting, Deployment, Domains, SSL, Homelab-Themen und
               individuellen technischen Lösungen im Hintergrund.
             </p>
@@ -651,8 +657,9 @@ function App() {
               </h2>
               <p>
                 Ich entwickle moderne Websites für kleine Unternehmen,
-                Selbstständige und lokale Betriebe, die professionell auftreten
-                wollen und dafür eine saubere Umsetzung brauchen.
+                Selbstständige und lokale Betriebe, besonders in Wiener
+                Neustadt und Umgebung, die professionell auftreten wollen und
+                dafür eine saubere Umsetzung brauchen.
               </p>
               <p>
                 Mich interessiert nicht nur, wie eine Website aussieht, sondern
@@ -739,6 +746,7 @@ function App() {
               <a href={profile.github} target="_blank" rel="noreferrer">
                 GitHub: {profile.githubHandle}
               </a>
+              <span>{profile.location}</span>
             </div>
           </div>
         </section>

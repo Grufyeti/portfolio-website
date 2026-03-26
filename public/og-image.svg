@@ -1,0 +1,22 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="40" fill="#080B10"/>
+  <rect x="42" y="42" width="1116" height="546" rx="28" fill="#0D1117" stroke="rgba(255,255,255,0.08)"/>
+  <circle cx="988" cy="124" r="180" fill="#4F8EF7" fill-opacity="0.18"/>
+  <circle cx="214" cy="536" r="220" fill="#7C5CFC" fill-opacity="0.16"/>
+  <circle cx="946" cy="486" r="120" fill="#20B8A0" fill-opacity="0.12"/>
+  <text x="92" y="170" fill="#4F8EF7" font-family="Arial, sans-serif" font-size="28" font-weight="700" letter-spacing="4">
+    MARTIN POKORNY
+  </text>
+  <text x="92" y="272" fill="#F0F4FF" font-family="Arial, sans-serif" font-size="74" font-weight="700">
+    Webdesign in
+  </text>
+  <text x="92" y="356" fill="#F0F4FF" font-family="Arial, sans-serif" font-size="74" font-weight="700">
+    Wiener Neustadt
+  </text>
+  <text x="92" y="430" fill="#8B9CB8" font-family="Arial, sans-serif" font-size="30">
+    Moderne Websites, Hosting, Deployment und technische Hilfe
+  </text>
+  <text x="92" y="500" fill="#8B9CB8" font-family="Arial, sans-serif" font-size="24">
+    www.pokorny-martin.com
+  </text>
+</svg>

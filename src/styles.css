@@ -1105,10 +1105,10 @@ section {
   margin-top: 24px;
 }
 
-.contact-inline a {
+.contact-inline a,
+.contact-inline span {
   font-size: 14px;
   color: var(--text2);
-  transition: color 0.2s;
 }
 
 .contact-inline a:hover,
