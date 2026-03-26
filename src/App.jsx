@@ -24,7 +24,7 @@ const heroHighlights = [
   {
     icon: 'WD',
     title: 'Moderne Websites mit klarer Wirkung',
-    text: 'Saubere Nutzerführung, hochwertige Gestaltung und ein Auftritt, der Vertrauen aufbaut.',
+    text: 'Saubere Nutzerführung, hochwertige Gestaltung und ein Auftritt, der gerade für Unternehmen in Wiener Neustadt Vertrauen aufbaut.',
   },
   {
     icon: 'HD',
@@ -44,9 +44,12 @@ const heroHighlights = [
 ];
 
 const heroStats = [
-  { value: '1', label: 'Ansprechpartner vom Briefing bis zum Launch' },
+  {
+    value: 'Wiener Neustadt',
+    label: 'lokal erreichbar in Niederösterreich und remote im DACH-Raum',
+  },
   { value: 'Web + Tech', label: 'Website, Hosting und technische Hilfe verzahnt' },
-  { value: 'Remote + Vor Ort', label: 'wenn Unterstützung praktisch gebraucht wird' },
+  { value: 'Go-live', label: 'statt Dateiabgabe und offener Technikfragen' },
 ];
 
 const services = [
@@ -231,7 +234,7 @@ const audiences = [
   {
     icon: 'KM',
     title: 'Kleine Unternehmen',
-    text: 'Für Betriebe, die online professionell auftreten und Leistungen verständlich, modern und vertrauenswürdig präsentieren wollen.',
+    text: 'Für Betriebe in Wiener Neustadt und Umgebung, die online professionell auftreten und Leistungen verständlich, modern und vertrauenswürdig präsentieren wollen.',
   },
   {
     icon: 'SD',
@@ -241,7 +244,7 @@ const audiences = [
   {
     icon: 'LB',
     title: 'Lokale Betriebe',
-    text: 'Für Handwerk, Beratung oder Service-Angebote, die lokal Vertrauen aufbauen und Anfragen vereinfachen möchten.',
+    text: 'Für Handwerk, Beratung oder Service-Angebote, die in Wiener Neustadt lokal Vertrauen aufbauen und Anfragen vereinfachen möchten.',
   },
   {
     icon: 'RL',
@@ -257,6 +260,36 @@ const audiences = [
     icon: 'OS',
     title: 'Vor-Ort- oder Remote-Hilfe',
     text: 'Für Kunden, die technische Unterstützung per Call oder bei passenden Themen direkt vor Ort benötigen.',
+  },
+];
+
+const localFocusPoints = [
+  'Webdesign und Entwicklung für Unternehmen in Wiener Neustadt und Umgebung',
+  'professionelle Website oder Relaunch für Selbstständige, Dienstleister und lokale Betriebe',
+  'Hosting, Deployment, SSL und Domain-Anbindung direkt mitgedacht',
+  'direkte Abstimmung, klare Kommunikation und bei Bedarf lokal erreichbar',
+];
+
+const localFocusCards = [
+  {
+    badge: 'Lokaler Auftritt',
+    title: 'Professionelle Website statt veralteter Online-Präsenz',
+    text: 'Wenn eine bestehende Seite nicht mehr zeitgemäß wirkt oder gar keine Website vorhanden ist, setze ich einen modernen Auftritt um, der Vertrauen schafft und Anfragen erleichtert.',
+  },
+  {
+    badge: 'Relaunch',
+    title: 'Sauberer Neustart ohne Technikchaos',
+    text: 'Design, Struktur, Inhalte und technische Basis werden gemeinsam neu aufgesetzt, damit der Relaunch nicht nur gut aussieht, sondern im Alltag einfacher funktioniert.',
+  },
+  {
+    badge: 'Technik',
+    title: 'Hosting, Domain und Go-live ohne Umwege',
+    text: 'Ich unterstütze auch bei Domain, SSL, Deployment, Reverse Proxy und laufender Betreuung, damit dein Projekt nicht an der Technik hängen bleibt.',
+  },
+  {
+    badge: 'Erreichbarkeit',
+    title: 'Remote effizient, lokal greifbar',
+    text: 'Viele Abstimmungen laufen schnell remote. Wenn es im Projekt sinnvoll ist, ist auch Unterstützung in Wiener Neustadt und Umgebung möglich.',
   },
 ];
 
@@ -304,7 +337,7 @@ const faqItems = [
   {
     question: 'Arbeitest du auch für Kunden in Wiener Neustadt und Umgebung?',
     answer:
-      'Ja. Ich arbeite remote, unterstütze aber auch gezielt Kunden aus Wiener Neustadt und Umgebung, wenn eine lokale Zusammenarbeit sinnvoll ist. Gerade für kleinere Unternehmen, Selbstständige und Betriebe ist das oft praktisch.',
+      'Ja. Ich arbeite remote, unterstütze aber auch gezielt Kunden aus Wiener Neustadt und Umgebung, wenn eine lokale Zusammenarbeit sinnvoll ist. Wenn du einen Webdesigner in Wiener Neustadt suchst, der Gestaltung und Technik zusammen denkt, passt das sehr gut zu meiner Arbeitsweise.',
   },
   {
     question: 'Müssen Texte und Inhalte schon komplett fertig sein?',
@@ -382,10 +415,12 @@ function App() {
           <div className="hero-grid" />
 
           <div className="section hero-content">
-            <span className="label">Freelancer für Webdesign, Hosting & Technik</span>
+            <span className="label">
+              Freelancer für Webdesign in Wiener Neustadt, Hosting & Technik
+            </span>
             <h1>
-              Moderne Websites mit <span className="grad">klarer Wirkung</span> und
-              technischer Umsetzung aus einer Hand.
+              Professionelles <span className="grad">Webdesign in Wiener Neustadt</span>{' '}
+              mit klarer Wirkung und technischer Umsetzung aus einer Hand.
             </h1>
             <p className="hero-sub">
               Ich entwickle professionelle Websites für kleine Unternehmen,
@@ -622,7 +657,7 @@ function App() {
           <SectionHeader
             label="Für wen ich arbeite"
             title="Für Unternehmen und Menschen, die eine klare Lösung statt Bastelarbeit wollen"
-            text="Die Zusammenarbeit passt besonders gut, wenn du eine moderne Website oder technische Unterstützung willst, aber Gestaltung, Technik und Go-live nicht auf mehrere Dienstleister aufteilen möchtest."
+            text="Die Zusammenarbeit passt besonders gut, wenn du in Wiener Neustadt oder darüber hinaus eine moderne Website oder technische Unterstützung willst, aber Gestaltung, Technik und Go-live nicht auf mehrere Dienstleister aufteilen möchtest."
           />
 
           <div className="audience-grid">
@@ -635,6 +670,55 @@ function App() {
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        <div className="section-divider" />
+
+        <section className="section-full local-seo-wrap" id="wiener-neustadt">
+          <div className="section-inner local-seo-grid">
+            <div className="local-seo-copy">
+              <span className="label">Webdesign Wiener Neustadt</span>
+              <h2>
+                Professionelle Websites für Wiener Neustadt, Umgebung und
+                Unternehmen mit lokalem Anspruch.
+              </h2>
+              <p>
+                Ich arbeite als Freelancer für Webdesign in Wiener Neustadt und
+                unterstütze kleine Unternehmen, Selbstständige und lokale
+                Betriebe, die eine professionelle Website brauchen, die modern
+                aussieht, klar kommuniziert und technisch sauber live geht.
+              </p>
+              <p>
+                Gerade bei lokalen Projekten ist oft wichtig, dass nicht nur das
+                Design stimmt, sondern auch Hosting, Deployment, Domain, SSL
+                und die laufende Betreuung mitgedacht werden. Genau darauf ist
+                die Zusammenarbeit ausgelegt: direkt, pragmatisch und ohne
+                Agentur-Overhead.
+              </p>
+
+              <div className="local-focus-points">
+                {localFocusPoints.map((point) => (
+                  <div key={point} className="local-focus-point">
+                    {point}
+                  </div>
+                ))}
+              </div>
+
+              <a className="btn btn-primary" href={`mailto:${profile.email}`}>
+                Projekt in Wiener Neustadt anfragen
+              </a>
+            </div>
+
+            <div className="local-seo-cards">
+              {localFocusCards.map((card) => (
+                <article key={card.title} className="local-seo-card">
+                  <span className="local-seo-badge">{card.badge}</span>
+                  <h3>{card.title}</h3>
+                  <p>{card.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -728,9 +812,10 @@ function App() {
               zuverlässig funktioniert?
             </h2>
             <p>
-              Wenn du eine moderne Website, Unterstützung bei Hosting und
-              Deployment oder Hilfe bei Homelab- und Reverse-Proxy-Themen
-              brauchst, lass uns kurz sprechen.
+              Wenn du in Wiener Neustadt oder darüber hinaus eine moderne
+              Website, Unterstützung bei Hosting und Deployment oder Hilfe bei
+              Homelab- und Reverse-Proxy-Themen brauchst, lass uns kurz
+              sprechen.
             </p>
             <div className="cta-btns">
               <a className="btn btn-primary" href={`mailto:${profile.email}`}>
