@@ -1,50 +1,63 @@
-# Portfolio Website
+# Martin Pokorny Portfolio Website
 
-Moderne Premium-Portfolio-Website für Freelancer im Bereich Webdesign & Entwicklung.
+Live unter [www.pokorny-martin.com](https://www.pokorny-martin.com).
 
-## 📖 Über das Projekt
+## Inhalt
 
-Eine professionelle, vollständig responsive Portfolio-Website mit modernem Dark-Premium-Design. Die Website präsentiert Webdesign- und Entwicklungsdienstleistungen mit Fokus auf technische Kompetenz und hochwertige Umsetzung.
+Diese Website präsentiert Martin Pokorny als Freelancer für:
 
-Die Seite richtet sich an kleine Unternehmen, Selbstständige und lokale Betriebe, die eine professionelle Online-Präsenz mit zuverlässiger technischer Umsetzung suchen.
+- Webdesign und Entwicklung
+- Hosting, Deployment und Reverse Proxy
+- technische Lösungen und Homelab-Unterstützung
+- laufende Website-Betreuung und Relaunches
 
-## ✨ Features
+Die Seite enthält echte Referenzen und Kontaktwege:
 
-- **Dark Premium Design** – Moderner SaaS/Agentur-Look mit eleganten Farbverläufen
-- **12 Sektionen** – Hero, Services, Projektablauf, Projekte, FAQ, Kontakt und mehr
-- **Vollständig responsive** – Optimiert für alle Geräte und Bildschirmgrößen
-- **Smooth Scroll Navigation** – Flüssige Seitennavigation
-- **Professionelle deutsche Texte** – Keine Platzhalter, alle Inhalte fertig ausformuliert
-- **Moderne Animationen** – Hover-Effekte, Gradients und subtile Transitions
-- **SEO-optimiert** – Saubere HTML-Struktur und Meta-Tags
+- E-Mail: `martinkopoky@gmail.com`
+- Telefon: `+43 650 411 6441`
+- GitHub: [github.com/Grufyeti](https://github.com/Grufyeti)
 
-## 🛠️ Technologien
+## Reale Referenzen
 
-- **React 18** – Moderne UI-Bibliothek
-- **Vite** – Schnelles Build-Tool
-- **Tailwind CSS** – Utility-First CSS Framework
-- **Lucide Icons** – Moderne Icon-Bibliothek
+- [euroleg.sk](https://euroleg.sk) – laufende Betreuung und technische Pflege
+- [Avonautomobile.at](https://avonautomobile.at) – Umsetzung und technische Betreuung
+- Homelab Dashboard und weitere Projekte auf [GitHub](https://github.com/Grufyeti)
 
-## 📂 Projektstruktur
+## Stack
 
-```
-portfoliowebseite/
-├── Portfolio.jsx          # Hauptkomponente mit kompletter Website
-├── src/
-│   ├── main.jsx          # React Entry Point
-│   └── index.css         # Tailwind CSS Imports
-├── index.html            # HTML Template
-├── package.json          # Dependencies
-├── vite.config.js        # Vite Konfiguration
-└── tailwind.config.js    # Tailwind CSS Konfiguration
+- React
+- Vite
+- eigenes CSS
+
+## Lokal starten
+
+```bash
+npm install
+npm run dev
 ```
 
-## 📧 Kontakt
+## Build
 
-**Martin Pokorny**  
-E-Mail: martinkopoky@gmail.com  
-GitHub: [https://github.com/Grufyeti](https://github.com/Grufyeti)
+```bash
+npm run build
+```
 
----
+## Deployment
 
-© 2024 Martin Pokorny. Alle Rechte vorbehalten.
+Die Produktivversion läuft aktuell:
+
+- App-Server: `10.0.0.38`
+- Reverse Proxy: `10.0.0.244`
+- Domain: `www.pokorny-martin.com`
+
+## Anpassen
+
+Die inhaltlichen Daten liegen hauptsächlich in `src/App.jsx`:
+
+- `profile`
+- `services`
+- `projects`
+- `audiences`
+- `faqItems`
+
+Farben und Layout liegen in `src/styles.css`.
