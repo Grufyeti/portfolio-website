@@ -15,7 +15,12 @@ import {
   Clock,
   MessageSquare,
   ChevronDown,
-  ExternalLink
+  ExternalLink,
+  Boxes,
+  Database,
+  Container,
+  Terminal,
+  Braces
 } from 'lucide-react';
 
 const Portfolio = () => {
@@ -672,6 +677,33 @@ const Portfolio = () => {
                 Egal, ob moderne Unternehmenswebsite, Landingpage oder individuelle Weblösung – 
                 ich setze Projekte um, die nicht nur gut aussehen, sondern auch professionell funktionieren.
               </p>
+            </div>
+
+            {/* Tech Stack */}
+            <div className="mt-12 pt-8 border-t border-slate-800/50">
+              <h3 className="text-xl font-semibold mb-6 text-center">Technologien & Tools</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  { name: "React", icon: Braces, color: "from-cyan-400 to-blue-400" },
+                  { name: "TypeScript", icon: Code2, color: "from-blue-400 to-indigo-400" },
+                  { name: "Node.js", icon: Server, color: "from-green-400 to-emerald-400" },
+                  { name: "Python", icon: Terminal, color: "from-yellow-400 to-amber-400" },
+                  { name: "Docker", icon: Container, color: "from-blue-400 to-cyan-400" },
+                  { name: "PostgreSQL", icon: Database, color: "from-blue-400 to-purple-400" },
+                  { name: "Git", icon: Boxes, color: "from-orange-400 to-red-400" },
+                  { name: "C++", icon: Code2, color: "from-indigo-400 to-purple-400" }
+                ].map((tech, index) => (
+                  <div 
+                    key={index}
+                    className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4 hover:border-cyan-500/30 transition-all group text-center"
+                  >
+                    <div className={`inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br ${tech.color} bg-opacity-20 mb-3 group-hover:scale-110 transition-transform`}>
+                      <tech.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <p className="text-sm font-medium text-slate-300">{tech.name}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
