@@ -768,10 +768,16 @@ section {
   color: var(--accent);
 }
 
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 18px;
+}
+
 .project-link {
   display: inline-flex;
   align-items: center;
-  margin-top: 18px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text);

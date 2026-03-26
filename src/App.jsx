@@ -172,8 +172,16 @@ const projects = [
     text: 'Ein eigenes Dashboard für Services, Status und schnellen Zugriff auf selbst gehostete Dienste im Homelab-Umfeld.',
     result: 'Ergebnis: mehr Übersicht, schnellere Zugriffe und eine sauberere technische Oberfläche im Alltag.',
     tech: ['Dashboard UI', 'Self-Hosting', 'Docker', 'Reverse Proxy', 'Homelab'],
-    url: 'https://github.com/Grufyeti',
-    urlLabel: 'Mehr auf GitHub',
+    links: [
+      {
+        href: 'https://github.com/Grufyeti',
+        label: 'Mehr auf GitHub',
+      },
+      {
+        href: 'https://homelab.pokorny-martin.com',
+        label: 'Live ansehen',
+      },
+    ],
   },
   {
     tone: 'violet',
@@ -183,8 +191,12 @@ const projects = [
     text: 'Ich betreue und pflege euroleg.sk, setze Änderungen um und halte die Website technisch am Laufen.',
     result: 'Ergebnis: verlässliche laufende Betreuung einer produktiven Website inklusive technischer Anpassungen.',
     tech: ['HTML', 'CSS', 'JavaScript', 'IIS', 'Wartung'],
-    url: 'https://euroleg.sk',
-    urlLabel: 'Website ansehen',
+    links: [
+      {
+        href: 'http://euroleg.sk',
+        label: 'Website ansehen',
+      },
+    ],
   },
   {
     tone: 'teal',
@@ -194,8 +206,12 @@ const projects = [
     text: 'Website umgesetzt und technisch betreut, inklusive Anpassungen, Hosting-naher Themen und laufender Pflege.',
     result: 'Ergebnis: professioneller Auftritt, direkte Betreuung und schnelle technische Umsetzung ohne Agentur-Umweg.',
     tech: ['Webdesign', 'Deployment', 'SSL', 'Reverse Proxy', 'Wartung'],
-    url: 'https://avonautomobile.at',
-    urlLabel: 'Website ansehen',
+    links: [
+      {
+        href: 'https://avonautomobile.at',
+        label: 'Website ansehen',
+      },
+    ],
   },
 ];
 
@@ -587,14 +603,19 @@ function App() {
                       </span>
                     ))}
                   </div>
-                  <a
-                    className="project-link"
-                    href={project.url}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {project.urlLabel}
-                  </a>
+                  <div className="project-links">
+                    {project.links.map((link) => (
+                      <a
+                        key={link.href}
+                        className="project-link"
+                        href={link.href}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </article>
             ))}

@@ -2,8 +2,6 @@
 
 React/Vite-Onepage fuer eine moderne Portfolio- bzw. Freelancer-Website.
 
-Live: [https://www.pokorny-martin.com](https://www.pokorny-martin.com)
-
 ## Tech Stack
 
 - React 18
