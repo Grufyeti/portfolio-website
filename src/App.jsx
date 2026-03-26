@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { seoTopics } from './seoPageData';
 
 const profile = {
   brand: 'Martin Pokorny',
@@ -740,6 +741,29 @@ function App() {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+
+        <div className="section-divider" />
+
+        <section className="section seo-related-home">
+          <SectionHeader
+            label="Themen im Fokus"
+            title="Drei zusaetzliche Unterseiten fuer konkrete Suchanfragen und Leistungen"
+            text="Diese Seiten vertiefen wichtige Themen rund um Webdesign in Wiener Neustadt, Website Relaunches und technische Umsetzung mit Hosting, Deployment und Reverse Proxy."
+          />
+
+          <div className="seo-topic-grid">
+            {seoTopics.map((topic) => (
+              <article key={topic.key} className="seo-topic-card">
+                <span className="seo-topic-label">{topic.label}</span>
+                <h3>{topic.title}</h3>
+                <p>{topic.teaser}</p>
+                <a className="project-link" href={topic.href}>
+                  Unterseite ansehen
+                </a>
+              </article>
+            ))}
           </div>
         </section>
 
