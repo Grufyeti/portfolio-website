@@ -1,35 +1,15 @@
-# Martin Pokorny Portfolio Website
+# Portfolio Website
 
-Live unter [www.pokorny-martin.com](https://www.pokorny-martin.com).
+React/Vite-Onepage für eine moderne Portfolio- bzw. Freelancer-Website.
 
-## Inhalt
+## Tech Stack
 
-Diese Website präsentiert Martin Pokorny als Freelancer für:
+- React 18
+- Vite 8
+- eigenes CSS ohne UI-Framework
+- Google Fonts (`Syne`, `DM Sans`)
 
-- Webdesign und Entwicklung
-- Hosting, Deployment und Reverse Proxy
-- technische Lösungen und Homelab-Unterstützung
-- laufende Website-Betreuung und Relaunches
-
-Die Seite enthält echte Referenzen und Kontaktwege:
-
-- E-Mail: `martinkopoky@gmail.com`
-- Telefon: `+43 650 411 6441`
-- GitHub: [github.com/Grufyeti](https://github.com/Grufyeti)
-
-## Reale Referenzen
-
-- [euroleg.sk](https://euroleg.sk) – laufende Betreuung und technische Pflege
-- [Avonautomobile.at](https://avonautomobile.at) – Umsetzung und technische Betreuung
-- Homelab Dashboard und weitere Projekte auf [GitHub](https://github.com/Grufyeti)
-
-## Stack
-
-- React
-- Vite
-- eigenes CSS
-
-## Lokal starten
+## Entwicklung
 
 ```bash
 npm install
@@ -42,17 +22,35 @@ npm run dev
 npm run build
 ```
 
-## Deployment
+## Preview
 
-Die Produktivversion läuft aktuell:
+```bash
+npm run preview
+```
 
-- App-Server: `10.0.0.38`
-- Reverse Proxy: `10.0.0.244`
-- Domain: `www.pokorny-martin.com`
+## Projektstruktur
 
-## Anpassen
+```text
+.
+├── index.html
+├── package.json
+├── vite.config.js
+└── src
+    ├── App.jsx
+    ├── main.jsx
+    └── styles.css
+```
 
-Die inhaltlichen Daten liegen hauptsächlich in `src/App.jsx`:
+## Wichtige Dateien
+
+- `src/App.jsx`: Inhalte, Sections, Projektdaten, Kontakttexte
+- `src/styles.css`: komplettes Layout, Farben, Typografie und Responsive-Verhalten
+- `src/main.jsx`: React-Einstiegspunkt
+- `index.html`: HTML-Template und Meta-Tags
+
+## Inhaltlich anpassen
+
+Die meisten inhaltlichen Änderungen passieren in `src/App.jsx`:
 
 - `profile`
 - `services`
@@ -60,4 +58,4 @@ Die inhaltlichen Daten liegen hauptsächlich in `src/App.jsx`:
 - `audiences`
 - `faqItems`
 
-Farben und Layout liegen in `src/styles.css`.
+Design und visuelle Anpassungen passieren in `src/styles.css`.
