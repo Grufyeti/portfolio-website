@@ -42,6 +42,12 @@ body {
   overflow-x: hidden;
 }
 
+main,
+section,
+article {
+  min-width: 0;
+}
+
 body::before {
   content: '';
   position: fixed;
@@ -246,6 +252,8 @@ section {
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  flex-wrap: wrap;
+  max-width: 100%;
   padding: 6px 14px;
   border-radius: 100px;
   border: 1px solid var(--border2);
@@ -256,6 +264,7 @@ section {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 24px;
+  line-height: 1.4;
 }
 
 .label::before {
@@ -298,6 +307,7 @@ section {
 .hero-content {
   position: relative;
   z-index: 2;
+  width: 100%;
 }
 
 .hero h1 {
@@ -305,6 +315,7 @@ section {
   font-size: clamp(44px, 6vw, 80px);
   font-weight: 800;
   margin-bottom: 24px;
+  text-wrap: balance;
 }
 
 .hero h1 .grad {
@@ -321,6 +332,7 @@ section {
   color: var(--text2);
   font-weight: 300;
   line-height: 1.72;
+  text-wrap: pretty;
 }
 
 .hero-btns {
@@ -328,6 +340,23 @@ section {
   flex-wrap: wrap;
   gap: 14px;
   margin-bottom: 56px;
+}
+
+.hero-btns .btn,
+.hero-stats,
+.stat-item,
+.inline-cta > *,
+.projects-note > *,
+.footer-top > *,
+.footer-bottom > *,
+.hosting-grid > *,
+.local-seo-grid > *,
+.about-grid > *,
+.process-step > *,
+.seo-nav-menu,
+.seo-content-grid > *,
+.seo-topic-grid > * {
+  min-width: 0;
 }
 
 .hero-stats {
@@ -425,6 +454,7 @@ section {
   margin-bottom: 16px;
   font-size: clamp(32px, 4vw, 52px);
   font-weight: 700;
+  text-wrap: balance;
 }
 
 .section-header p {
@@ -432,6 +462,7 @@ section {
   font-size: 17px;
   color: var(--text2);
   font-weight: 300;
+  text-wrap: pretty;
 }
 
 .services-grid,
@@ -1197,6 +1228,7 @@ section {
   margin-bottom: 20px;
   font-size: clamp(28px, 3vw, 40px);
   font-weight: 700;
+  text-wrap: balance;
 }
 
 .about-right p {
@@ -1204,6 +1236,7 @@ section {
   font-size: 16px;
   color: var(--text2);
   line-height: 1.7;
+  text-wrap: pretty;
 }
 
 .faq-list {
@@ -1304,6 +1337,7 @@ section {
   margin-bottom: 20px;
   font-size: clamp(32px, 5vw, 60px);
   font-weight: 800;
+  text-wrap: balance;
 }
 
 .cta-final p {
@@ -1311,6 +1345,7 @@ section {
   font-size: 18px;
   color: var(--text2);
   font-weight: 300;
+  text-wrap: pretty;
 }
 
 .contact-inline {
@@ -1415,6 +1450,7 @@ footer {
 @media (max-width: 960px) {
   nav {
     padding: 16px 20px;
+    gap: 16px;
   }
 
   .nav-toggle {
@@ -1463,6 +1499,10 @@ footer {
     border: none;
     background: transparent;
     box-shadow: none;
+  }
+
+  .seo-nav-menu .nav-cta {
+    width: auto;
   }
 
   .seo-nav-menu .nav-links {
@@ -1518,13 +1558,29 @@ footer {
 }
 
 @media (max-width: 700px) {
+  nav {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .hero-wrap {
+    min-height: auto;
+    padding-top: 96px;
+  }
+
+  .seo-page-hero {
+    padding-top: 220px;
+  }
+
   .hero h1 {
-    font-size: clamp(38px, 12vw, 54px);
+    font-size: clamp(34px, 10.5vw, 44px);
+    line-height: 1.02;
   }
 
   .hero-sub,
+  .section-header p,
   .cta-final p {
-    font-size: 17px;
+    font-size: 16px;
   }
 
   .hero-stats {
@@ -1533,10 +1589,15 @@ footer {
   }
 
   .seo-nav-menu {
+    flex-basis: 100%;
     width: 100%;
     flex-direction: column;
     align-items: stretch;
     gap: 14px;
+  }
+
+  .seo-nav-menu .nav-cta {
+    width: 100%;
   }
 
   .seo-nav-menu .nav-links {
@@ -1552,6 +1613,7 @@ footer {
   }
 
   .trust-item {
+    padding: 24px 20px;
     border-right: none;
     border-bottom: 1px solid var(--border);
   }
@@ -1564,15 +1626,41 @@ footer {
     padding: 32px 24px;
   }
 
+  .service-card,
+  .why-item,
+  .local-seo-card,
+  .seo-copy-card,
+  .seo-topic-card {
+    padding: 24px;
+  }
+
+  .project-body,
+  .hosting-card,
+  .audience-item {
+    padding: 20px;
+  }
+
+  .about-grid,
+  .hosting-grid,
+  .local-seo-grid {
+    gap: 32px;
+  }
+
   .process-step {
     grid-template-columns: 1fr;
     gap: 14px;
+    padding: 28px 0;
   }
 
   .faq-q,
   .faq-a {
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .faq-q {
+    align-items: flex-start;
+    font-size: 15px;
   }
 
   .cta-btns,
@@ -1586,6 +1674,11 @@ footer {
     justify-content: flex-start;
   }
 
+  .contact-inline a,
+  .contact-inline span {
+    width: 100%;
+  }
+
   .btn {
     width: 100%;
   }
@@ -1594,7 +1687,120 @@ footer {
     padding: 48px 20px 32px;
   }
 
+  .footer-top {
+    gap: 36px;
+    padding-bottom: 36px;
+  }
+
   .footer-bottom {
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 540px) {
+  nav {
+    padding: 12px 14px;
+  }
+
+  .nav-brand {
+    font-size: 16px;
+  }
+
+  .nav-menu {
+    left: 14px;
+    right: 14px;
+    top: calc(100% + 10px);
+    padding: 16px;
+  }
+
+  section {
+    padding: 72px 20px;
+  }
+
+  .hero-wrap {
+    padding-top: 88px;
+  }
+
+  .label {
+    padding: 6px 12px;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 9.8vw, 36px);
+    margin-bottom: 18px;
+  }
+
+  .seo-page-hero {
+    padding-top: 248px;
+  }
+
+  .hero-sub {
+    margin-bottom: 28px;
+    font-size: 15px;
+  }
+
+  .hero-btns {
+    margin-bottom: 36px;
+  }
+
+  .hero-stats {
+    padding-top: 18px;
+    gap: 14px;
+  }
+
+  .stat-num {
+    font-size: 22px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .section-header {
+    margin-bottom: 40px;
+  }
+
+  .section-header h2,
+  .cta-final h2 {
+    font-size: clamp(28px, 8vw, 36px);
+  }
+
+  .inline-cta,
+  .projects-note {
+    padding: 24px 20px;
+    gap: 18px;
+  }
+
+  .service-card h3,
+  .step-content h3,
+  .project-card h3,
+  .local-seo-card h3,
+  .seo-copy-card h2,
+  .seo-topic-card h3,
+  .about-right h2 {
+    font-size: 18px;
+  }
+
+  .project-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .local-focus-point,
+  .seo-hero-point,
+  .seo-bullet {
+    padding: 14px 15px;
+    font-size: 13px;
+  }
+
+  .faq-q {
+    gap: 14px;
+  }
+
+  .cta-final {
+    padding: 96px 20px;
   }
 }
