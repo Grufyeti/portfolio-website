@@ -1,941 +1,1075 @@
-import { useState } from 'react';
-import { seoTopics } from './seoPageData';
+import { startTransition, useEffect, useLayoutEffect, useRef, useState } from "react";
+import "@theme-toggles/react/css/Expand.css";
+import {
+  ArrowUpRight,
+  Circle,
+  Globe,
+  Mail,
+  Menu,
+  Moon,
+  Phone,
+  Server,
+  Sparkles,
+  Sun,
+  SquareTerminal,
+  Workflow,
+  X,
+} from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Expand } from "@theme-toggles/react";
 
-const profile = {
-  brand: 'Martin Pokorny',
-  title: 'Webdesign, Entwicklung, Hosting und technische Lösungen',
-  email: 'martinkopoky@gmail.com',
-  phone: '+43 650 411 6441',
-  github: 'https://github.com/Grufyeti',
-  githubHandle: 'Grufyeti',
-  location: 'Wiener Neustadt, Niederösterreich, remote & nach Absprache vor Ort',
-  responseNote: 'Antwort per Mail, Telefon oder kurzer Abstimmung.',
-};
-
-const navigation = [
-  { label: 'Leistungen', href: '#leistungen' },
-  { label: 'Ablauf', href: '#ablauf' },
-  { label: 'Projekte', href: '#projekte' },
-  { label: 'Technik', href: '#technik' },
-  { label: 'FAQ', href: '#faq' },
-  { label: 'Kontakt', href: '#kontakt' },
+const navItems = [
+  { id: "leistungen", label: "Leistungen" },
+  { id: "projekte", label: "Projekte" },
+  { id: "ablauf", label: "Ablauf" },
+  { id: "faq", label: "FAQ" },
+  { id: "kontakt", label: "Kontakt" },
 ];
 
-const heroHighlights = [
-  {
-    icon: 'WD',
-    title: 'Moderne Websites mit klarer Wirkung',
-    text: 'Saubere Nutzerführung, hochwertige Gestaltung und ein Auftritt, der gerade für Unternehmen in Wiener Neustadt Vertrauen aufbaut.',
-  },
-  {
-    icon: 'HD',
-    title: 'Hosting, Deployment und Technik inklusive',
-    text: 'Domains, SSL, Reverse Proxy und Go-live werden bei Bedarf direkt mitübernommen.',
-  },
-  {
-    icon: 'VC',
-    title: 'Direkte Zusammenarbeit',
-    text: 'Ein Ansprechpartner, klare Abstimmung und Unterstützung remote oder nach Absprache auch vor Ort.',
-  },
-  {
-    icon: 'TL',
-    title: 'Technische Lösungen statt Standarddenken',
-    text: 'Von Websites bis Homelab-Unterstützung: pragmatische Hilfe für konkrete Anforderungen.',
-  },
+const heroFacts = [
+  "Wiener Neustadt, Österreich",
+  "HTBLuVA Wiener Neustadt, 3. Jahrgang",
+  "Webdesign, Hosting, Deployment, Reverse Proxy",
+  "martinkopoky@gmail.com",
 ];
 
-const heroStats = [
-  {
-    value: 'Wiener Neustadt',
-    label: 'lokal erreichbar in Niederösterreich und remote im DACH-Raum',
-  },
-  { value: 'Web + Tech', label: 'Website, Hosting und technische Hilfe verzahnt' },
-  { value: 'Go-live', label: 'statt Dateiabgabe und offener Technikfragen' },
+const logoItems = [
+  { label: "React", icon: Circle },
+  { label: "Vite", icon: Sparkles },
+  { label: "Tailwind", icon: Workflow },
+  { label: "Framer Motion", icon: Workflow },
+  { label: "Reverse Proxy", icon: Globe },
+  { label: "Deployment", icon: ArrowUpRight },
+  { label: "Hosting", icon: Server },
+  { label: "Automation", icon: SquareTerminal },
+  { label: "SSL", icon: Circle },
+  { label: "Homelab", icon: Globe },
 ];
 
-const services = [
+const gravityNodes = [
+  { size: 10, top: "12%", left: "12%", duration: 7.4, delay: 0.2 },
+  { size: 16, top: "24%", right: "10%", duration: 8.6, delay: 0.7 },
+  { size: 12, bottom: "28%", left: "8%", duration: 6.8, delay: 1.2 },
+  { size: 14, bottom: "16%", right: "14%", duration: 9.1, delay: 0.4 },
+  { size: 8, top: "48%", left: "4%", duration: 6.2, delay: 1.4 },
+  { size: 18, top: "8%", right: "28%", duration: 10.2, delay: 1.1 },
+];
+
+const proofItems = [
+  "Professionelle Websites für kleine Unternehmen, Selbstständige und lokale Betriebe",
+  "Technische Umsetzung aus einer Hand: Domain, SSL, Hosting, Deployment und Reverse Proxy",
+  "Starker Mix aus Frontend, Systemarbeit, Networking und Automation",
+];
+
+const serviceCards = [
   {
-    number: '01',
-    tone: 'blue',
-    icon: 'W',
-    label: 'Webdesign',
-    title: 'Webdesign & Entwicklung',
-    text: 'Ich entwickle moderne, professionelle Websites, die klar kommunizieren, sauber führen und auf allen Geräten hochwertig wirken.',
-    tags: [
-      'Unternehmenswebsites',
-      'Landingpages',
-      'individuelle Webprojekte',
-      'responsive Umsetzung',
-      'klare Benutzerführung',
-      'performanceorientiert',
-    ],
+    title: "Webdesign & Relaunch",
+    icon: Globe,
+    copy:
+      "Moderne Websites mit klarer Struktur, starker Typografie und einem Auftritt, der sofort professionell wirkt.",
   },
   {
-    number: '02',
-    tone: 'violet',
-    icon: 'H',
-    label: 'Hosting',
-    title: 'Hosting & Deployment',
-    text: 'Ich bringe deine Website nicht nur in Form, sondern auch zuverlässig online und kümmere mich um Domain, SSL, Deployment und technische Feinheiten dahinter.',
-    tags: [
-      'Domain verbinden',
-      'SSL einrichten',
-      'Server-Setup',
-      'Deployment',
-      'Reverse Proxy',
-      'technische Betreuung',
-    ],
+    title: "Hosting & Deployment",
+    icon: Server,
+    copy:
+      "Ich übernehme Domain-Anbindung, SSL, Deployment und den technischen Live-Betrieb, damit die Website nicht nur gut aussieht, sondern sauber online ist.",
   },
   {
-    number: '03',
-    tone: 'teal',
-    icon: 'T',
-    label: 'Technical Solutions',
-    title: 'Technische Lösungen & Homelab-Hilfe',
-    text: 'Wenn Standard nicht reicht, unterstütze ich bei Webtools, Self-Hosting, Homelab-Themen und technischen Setups remote oder bei passenden Projekten auch vor Ort.',
-    tags: [
-      'Homelab-Beratung',
-      'Dashboards',
-      'interne Systeme',
-      'Reverse Proxy',
-      'Self-Hosting',
-      'technische Problemlösung',
-    ],
+    title: "Technische Lösungen",
+    icon: Workflow,
+    copy:
+      "Wenn ein Projekt mehr braucht als nur schöne Oberflächen, bringe ich Server, Reverse Proxy, Homelab-Erfahrung und praktische Automation mit.",
   },
 ];
 
-const benefits = [
+const projectCards = [
   {
-    title: 'Nicht nur schön, sondern funktional',
-    text: 'Du bekommst nicht nur ein ansprechendes Layout, sondern eine Website, die verständlich führt, professionell wirkt und im Alltag wirklich funktioniert.',
+    title: "portfolio-website",
+    eyebrow: "JavaScript",
+    href: "https://github.com/Grufyeti/portfolio-website",
+    description:
+      "Meine eigene öffentliche Codebasis für den visuellen Auftritt, Frontend-Architektur und die Weiterentwicklung meiner Portfolio-Präsenz.",
+    accent: "from-amber-300/40 via-rose-300/20 to-transparent",
   },
   {
-    title: 'Design, Entwicklung und Technik aus einer Hand',
-    text: 'Webseite, Hosting, Deployment und technische Umsetzung greifen sauber ineinander. Das spart Abstimmung und verhindert Reibungsverluste.',
+    title: "beammp-server-plugins",
+    eyebrow: "Lua",
+    href: "https://github.com/Grufyeti/beammp-server-plugins",
+    description:
+      "Nützliche Commands für BeamMP-Server. Ein gutes Beispiel für praktische Systemarbeit und Scripting in einem realen Server-Kontext.",
+    accent: "from-rose-300/35 via-orange-300/15 to-transparent",
   },
   {
-    title: 'Direkte Kommunikation',
-    text: 'Kurze Wege, klare Rückmeldungen und Entscheidungen ohne unnötige Schleifen machen die Zusammenarbeit effizient und angenehm.',
-  },
-  {
-    title: 'Pragmatisch und strukturiert',
-    text: 'Jedes Projekt bekommt einen klaren Rahmen, nachvollziehbare Prioritäten und einen Ablauf, der für beide Seiten planbar bleibt.',
-  },
-  {
-    title: 'Praxisnahes Technikverständnis',
-    text: 'Durch Hosting-, Reverse-Proxy- und Homelab-Praxis kann ich technische Themen verständlich begleiten und zuverlässig umsetzen.',
-  },
-  {
-    title: 'Fokus auf echte Ergebnisse',
-    text: 'Ziel ist nicht maximale Komplexität, sondern eine saubere Lösung, die Vertrauen schafft, Anfragen erleichtert und stabil live geht.',
+    title: "GitHub Profil",
+    eyebrow: "Public work",
+    href: "https://github.com/Grufyeti",
+    description:
+      "Öffentliche Projekte und Experimente rund um Frontend, Infrastruktur, Caching, Entwicklungsumgebungen und Automation.",
+    accent: "from-orange-300/35 via-amber-300/15 to-transparent",
   },
 ];
 
 const processSteps = [
   {
-    step: '01',
-    badge: 'Start',
-    title: 'Erstgespräch & Anfrage',
-    text: 'Wir klären Ziel, Zielgruppe, Umfang und Prioritäten. So entsteht schnell eine realistische Richtung für dein Projekt.',
+    number: "01",
+    title: "Klares Erstgespräch",
+    copy:
+      "Wir klären Ziel, Zielgruppe, Stil, Inhalte und technische Anforderungen, damit die Website nicht nur schön, sondern auch sinnvoll wird.",
   },
   {
-    step: '02',
-    badge: 'Planung',
-    title: 'Konzept & Planung',
-    text: 'Struktur, Inhalte, Nutzerführung und technische Anforderungen werden sauber aufgesetzt, bevor die Umsetzung startet.',
+    number: "02",
+    title: "Design mit Richtung",
+    copy:
+      "Ich entwickle eine visuelle Linie, die professionell wirkt und sich deutlich von generischen Standardseiten abhebt.",
   },
   {
-    step: '03',
-    badge: 'Umsetzung',
-    title: 'Design & Entwicklung',
-    text: 'Das Design wird hochwertig ausgearbeitet und direkt responsive entwickelt, statt nur lose gestaltet zu werden.',
+    number: "03",
+    title: "Saubere Umsetzung",
+    copy:
+      "Das Design wird in ein modernes Frontend überführt und auf Performance, Responsivität und ein klares Nutzererlebnis geprüft.",
   },
   {
-    step: '04',
-    badge: 'Launch',
-    title: 'Go-live & Deployment',
-    text: 'Domain, Hosting, SSL, Formulare und alle technischen Details werden getestet, eingerichtet und zuverlässig live geschaltet.',
-  },
-  {
-    step: '05',
-    badge: 'Weiterführung',
-    title: 'Betreuung & Optimierung',
-    text: 'Nach dem Go-live können Inhalte erweitert, Prozesse verfeinert oder Technik, Hosting und Homelab-nahe Themen weiter betreut werden.',
+    number: "04",
+    title: "Go-live ohne Chaos",
+    copy:
+      "Deployment, Hosting, SSL, Domain und Weiterleitungen werden so umgesetzt, dass der Launch sauber und verlässlich funktioniert.",
   },
 ];
 
-const projects = [
+const faqs = [
   {
-    tone: 'blue',
-    symbol: 'HL',
-    category: 'Dashboard · Homelab',
-    title: 'Homelab Dashboard',
-    text: 'Ein eigenes Dashboard für Services, Status und schnellen Zugriff auf selbst gehostete Dienste im Homelab-Umfeld.',
-    result: 'Ergebnis: mehr Übersicht, schnellere Zugriffe und eine sauberere technische Oberfläche im Alltag.',
-    tech: ['Dashboard UI', 'Self-Hosting', 'Docker', 'Reverse Proxy', 'Homelab'],
-    links: [
-      {
-        href: 'https://github.com/Grufyeti',
-        label: 'Mehr auf GitHub',
-      },
-      {
-        href: 'https://homelab.pokorny-martin.com',
-        label: 'Live ansehen',
-      },
-    ],
+    question: "Was kostet eine Website?",
+    answer:
+      "Das hängt vom Umfang ab. Nach einem kurzen Erstgespräch kann ich den Aufwand realistisch einschätzen und transparent einordnen.",
+    meta: "Transparenter Start",
   },
   {
-    tone: 'violet',
-    symbol: 'EL',
-    category: 'Website · Maintenance & Weiterentwicklung',
-    title: 'euroleg.sk',
-    text: 'Ich betreue und pflege euroleg.sk, setze Änderungen um und halte die Website technisch am Laufen.',
-    result: 'Ergebnis: verlässliche laufende Betreuung einer produktiven Website inklusive technischer Anpassungen.',
-    tech: ['HTML', 'CSS', 'JavaScript', 'IIS', 'Wartung'],
-    links: [
-      {
-        href: 'http://euroleg.sk',
-        label: 'Website ansehen',
-      },
-    ],
+    question: "Wie lange dauert ein Projekt?",
+    answer:
+      "Kleinere Projekte lassen sich oft in wenigen Wochen umsetzen. Umfangreichere Websites mit mehreren Inhaltsbereichen und technischer Integration brauchen entsprechend mehr Zeit.",
+    meta: "Realistische Planung",
   },
   {
-    tone: 'teal',
-    symbol: 'AA',
-    category: 'Website · Umsetzung & Betreuung',
-    title: 'Avonautomobile.at',
-    text: 'Website umgesetzt und technisch betreut, inklusive Anpassungen, Hosting-naher Themen und laufender Pflege.',
-    result: 'Ergebnis: professioneller Auftritt, direkte Betreuung und schnelle technische Umsetzung ohne Agentur-Umweg.',
-    tech: ['Webdesign', 'Deployment', 'SSL', 'Reverse Proxy', 'Wartung'],
-    links: [
-      {
-        href: 'https://avonautomobile.at',
-        label: 'Website ansehen',
-      },
-    ],
+    question: "Kannst du Hosting und Domain übernehmen?",
+    answer:
+      "Ja. Auf Wunsch übernehme ich Hosting, Deployment, Domain-Anbindung, SSL, Weiterleitungen und die technische Vorbereitung für einen zuverlässigen Go-live.",
+    meta: "Alles aus einer Hand",
+  },
+  {
+    question: "Arbeitest du auch für Kunden in Wiener Neustadt und Umgebung?",
+    answer:
+      "Ja. Ich arbeite remote, unterstütze aber auch gezielt Kunden aus Wiener Neustadt und Umgebung, wenn eine lokale Zusammenarbeit sinnvoll ist.",
+    meta: "Lokal und remote",
   },
 ];
 
-const hostingPoints = [
-  'Hosting, Deployment und Domain-Anbindung aus einer Hand',
-  'SSL, Weiterleitungen und technische Einrichtung sauber vorbereitet',
-  'Server-Setup und Reverse Proxy dort, wo es für das Projekt sinnvoll ist',
-  'Zuverlässiger Go-live statt halbfertiger Übergabe',
-  'Unterstützung bei Homelab- und Self-Hosting-Themen per Call oder vor Ort',
-];
+function FlowingMenu({ activeSection, theme }) {
+  const initialIndex = Math.max(
+    0,
+    navItems.findIndex((item) => item.id === activeSection),
+  );
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const containerRef = useRef(null);
+  const itemRefs = useRef([]);
+  const [bubbleStyle, setBubbleStyle] = useState({ left: 0, width: 0, opacity: 0 });
 
-const hostingCards = [
-  {
-    icon: 'DNS',
-    title: 'Domain & DNS',
-    text: 'Verbindung, Weiterleitungen und saubere technische Zuordnung.',
-  },
-  {
-    icon: 'SSL',
-    title: 'SSL & Sicherheit',
-    text: 'HTTPS, Zertifikate und ein professionell abgesicherter Launch.',
-  },
-  {
-    icon: 'DEP',
-    title: 'Deployment',
-    text: 'Bereitstellung mit einem klaren Setup statt manueller Einzelaktionen.',
-  },
-  {
-    icon: 'LAB',
-    title: 'Homelab & Betrieb',
-    text: 'Reverse Proxy, Self-Hosting und praktische technische Unterstützung für laufende Systeme.',
-  },
-];
+  useEffect(() => {
+    const nextIndex = navItems.findIndex((item) => item.id === activeSection);
+    if (nextIndex >= 0) {
+      setActiveIndex(nextIndex);
+    }
+  }, [activeSection]);
 
-const audiences = [
-  {
-    icon: 'KM',
-    title: 'Kleine Unternehmen',
-    text: 'Für Betriebe in Wiener Neustadt und Umgebung, die online professionell auftreten und Leistungen verständlich, modern und vertrauenswürdig präsentieren wollen.',
-  },
-  {
-    icon: 'SD',
-    title: 'Selbstständige',
-    text: 'Für Dienstleister und Personenmarken, die eine professionelle Website statt eines improvisierten Auftritts brauchen.',
-  },
-  {
-    icon: 'LB',
-    title: 'Lokale Betriebe',
-    text: 'Für Handwerk, Beratung oder Service-Angebote, die in Wiener Neustadt lokal Vertrauen aufbauen und Anfragen vereinfachen möchten.',
-  },
-  {
-    icon: 'RL',
-    title: 'Relaunch-Projekte',
-    text: 'Für bestehende Websites, die optisch, inhaltlich oder technisch nicht mehr dem Anspruch des Unternehmens entsprechen.',
-  },
-  {
-    icon: 'IT',
-    title: 'Kunden mit Technikbedarf',
-    text: 'Für Projekte, bei denen Hosting, Deployment, Domains, SSL, Reverse Proxy oder Homelab-nahe Unterstützung bewusst mit abgegeben werden sollen.',
-  },
-  {
-    icon: 'OS',
-    title: 'Vor-Ort- oder Remote-Hilfe',
-    text: 'Für Kunden, die technische Unterstützung per Call oder bei passenden Themen direkt vor Ort benötigen.',
-  },
-];
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [activeSection]);
 
-const localFocusPoints = [
-  'Webdesign und Entwicklung für Unternehmen in Wiener Neustadt und Umgebung',
-  'professionelle Website oder Relaunch für Selbstständige, Dienstleister und lokale Betriebe',
-  'Hosting, Deployment, SSL und Domain-Anbindung direkt mitgedacht',
-  'direkte Abstimmung, klare Kommunikation und bei Bedarf lokal erreichbar',
-];
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    const activeItem = itemRefs.current[activeIndex];
 
-const localFocusCards = [
-  {
-    badge: 'Lokaler Auftritt',
-    title: 'Professionelle Website statt veralteter Online-Präsenz',
-    text: 'Wenn eine bestehende Seite nicht mehr zeitgemäß wirkt oder gar keine Website vorhanden ist, setze ich einen modernen Auftritt um, der Vertrauen schafft und Anfragen erleichtert.',
-  },
-  {
-    badge: 'Relaunch',
-    title: 'Sauberer Neustart ohne Technikchaos',
-    text: 'Design, Struktur, Inhalte und technische Basis werden gemeinsam neu aufgesetzt, damit der Relaunch nicht nur gut aussieht, sondern im Alltag einfacher funktioniert.',
-  },
-  {
-    badge: 'Technik',
-    title: 'Hosting, Domain und Go-live ohne Umwege',
-    text: 'Ich unterstütze auch bei Domain, SSL, Deployment, Reverse Proxy und laufender Betreuung, damit dein Projekt nicht an der Technik hängen bleibt.',
-  },
-  {
-    badge: 'Erreichbarkeit',
-    title: 'Remote effizient, lokal greifbar',
-    text: 'Viele Abstimmungen laufen schnell remote. Wenn es im Projekt sinnvoll ist, ist auch Unterstützung in Wiener Neustadt und Umgebung möglich.',
-  },
-];
+    if (!container || !activeItem) {
+      return;
+    }
 
-const faqItems = [
-  {
-    question: 'Was kostet eine Website?',
-    answer:
-      'Das hängt vom Umfang ab. Eine fokussierte Landingpage ist anders zu kalkulieren als ein kompletter Relaunch mit mehreren Unterseiten, technischer Einrichtung und individuellen Funktionen. Nach einem kurzen Erstgespräch kann ich den Aufwand realistisch einschätzen und transparent einordnen.',
-  },
-  {
-    question: 'Wie lange dauert ein Projekt?',
-    answer:
-      'Kleinere Projekte lassen sich oft in wenigen Wochen umsetzen. Umfangreichere Websites mit mehreren Inhaltsbereichen, Abstimmung und technischer Integration brauchen entsprechend mehr Zeit. Entscheidend ist, dass Ablauf, Prioritäten und Meilensteine von Anfang an klar sind.',
-  },
-  {
-    question: 'Kannst du Hosting und Domain übernehmen?',
-    answer:
-      'Ja. Auf Wunsch übernehme ich Hosting, Deployment, Domain-Anbindung, SSL, Weiterleitungen und die technische Vorbereitung für einen zuverlässigen Go-live.',
-  },
-  {
-    question: 'Kannst du eine bestehende Website modernisieren?',
-    answer:
-      'Ja. Viele Projekte starten nicht bei null, sondern mit einem Relaunch. Dabei können Design, Struktur, Inhalte und technische Basis gezielt modernisiert werden, ohne alles unnötig kompliziert zu machen.',
-  },
-  {
-    question: 'Arbeitest du auch an kleineren Projekten?',
-    answer:
-      'Ja, wenn Ziel und Nutzen klar sind. Nicht jedes Projekt braucht eine große Lösung. Oft ist eine schlanke, sauber umgesetzte Seite oder ein kleines Tool genau der richtige Schritt.',
-  },
-  {
-    question: 'Ist Wartung nach dem Launch möglich?',
-    answer:
-      'Ja. Ich kann nach dem Go-live bei technischen Anpassungen, kleineren Erweiterungen, Wartung oder allgemeinen Rückfragen unterstützen.',
-  },
-  {
-    question: 'Kannst du auch individuelle technische Funktionen umsetzen?',
-    answer:
-      'Ja. Dazu gehören zum Beispiel Formulare mit Logik, kleine Dashboards, interne Tools, API-Anbindungen oder pragmatische Weblösungen für wiederkehrende Abläufe.',
-  },
-  {
-    question: 'Hilfst du auch bei Homelab-, Self-Hosting- oder Netzwerk-Themen?',
-    answer:
-      'Ja. Ich unterstütze bei kleineren Homelab- und Self-Hosting-Setups, Reverse Proxy, Diensten, Dashboards und allgemeinen technischen Fragen. Das kann remote per Call oder bei passenden Projekten auch vor Ort stattfinden.',
-  },
-  {
-    question: 'Arbeitest du auch für Kunden in Wiener Neustadt und Umgebung?',
-    answer:
-      'Ja. Ich arbeite remote, unterstütze aber auch gezielt Kunden aus Wiener Neustadt und Umgebung, wenn eine lokale Zusammenarbeit sinnvoll ist. Wenn du einen Webdesigner in Wiener Neustadt suchst, der Gestaltung und Technik zusammen denkt, passt das sehr gut zu meiner Arbeitsweise.',
-  },
-  {
-    question: 'Müssen Texte und Inhalte schon komplett fertig sein?',
-    answer:
-      'Nein. Eine gute Website entsteht oft gemeinsam aus Struktur, Prioritäten und klarer Nutzenkommunikation. Bestehende Inhalte können überarbeitet, verdichtet und in eine bessere Form gebracht werden.',
-  },
-];
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = activeItem.getBoundingClientRect();
 
-function SectionHeader({ label, title, text }) {
+    setBubbleStyle({
+      left: itemRect.left - containerRect.left,
+      width: itemRect.width,
+      opacity: 1,
+    });
+  }, [activeIndex]);
+
+  const activeLabel = navItems[activeIndex]?.label ?? "Menü";
+
   return (
-    <div className="section-header">
-      <span className="label">{label}</span>
-      <h2>{title}</h2>
-      <p>{text}</p>
+    <>
+      <div
+        ref={containerRef}
+        className="relative hidden rounded-full border border-white/10 bg-white/[0.045] p-1 backdrop-blur-xl lg:block"
+      >
+        <motion.div
+          className="absolute top-1 bottom-1 rounded-full bg-gradient-to-r from-amber-200/80 via-rose-200/80 to-orange-200/80"
+          animate={{
+            left: bubbleStyle.left,
+            width: bubbleStyle.width,
+            opacity: bubbleStyle.opacity,
+          }}
+          transition={{ type: "spring", stiffness: 320, damping: 28 }}
+        />
+        <div className="relative flex items-center">
+          {navItems.map((item, index) => (
+            <a
+              key={item.id}
+              ref={(element) => {
+                itemRefs.current[index] = element;
+              }}
+              href={`#${item.id}`}
+              onMouseEnter={() => setActiveIndex(index)}
+              onFocus={() => setActiveIndex(index)}
+              className={`relative z-10 rounded-full px-5 py-3 text-center text-sm font-medium transition ${
+                activeIndex === index ? "text-stone-950" : "text-stone-300 hover:text-white"
+              }`}
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative lg:hidden">
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen((open) => !open)}
+          className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium backdrop-blur-xl transition ${
+            theme === "light"
+              ? "border-stone-300/70 bg-white/80 text-stone-700 hover:bg-white"
+              : "border-white/10 bg-white/[0.045] text-stone-200 hover:bg-white/[0.08]"
+          }`}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-nav-menu"
+        >
+          {activeLabel}
+          {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+        </button>
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              id="mobile-nav-menu"
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className={`absolute right-0 z-50 mt-2 w-56 overflow-hidden rounded-2xl border p-2 shadow-2xl backdrop-blur-xl ${
+                theme === "light"
+                  ? "border-stone-300/70 bg-white/95"
+                  : "border-white/10 bg-zinc-950/95"
+              }`}
+            >
+              {navItems.map((item, index) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`block rounded-xl px-3 py-2 text-sm transition ${
+                    activeIndex === index
+                      ? theme === "light"
+                        ? "bg-amber-100 text-amber-900"
+                        : "bg-white/12 text-amber-200"
+                      : theme === "light"
+                        ? "text-stone-700 hover:bg-stone-100"
+                        : "text-stone-200 hover:bg-white/8"
+                  }`}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </>
+  );
+}
+
+function ThemeToggle({ theme, onToggle, anchorRef }) {
+  const isDark = theme === "dark";
+
+  return (
+    <div ref={anchorRef} className="theme-toggle-shell">
+      <Expand
+        duration={750}
+        toggled={isDark}
+        toggle={onToggle}
+        className="theme-toggle-button text-stone-200"
+        aria-label={isDark ? "Zu Hellmodus wechseln" : "Zu Dunkelmodus wechseln"}
+        title={isDark ? "Hellmodus" : "Dunkelmodus"}
+      />
     </div>
   );
 }
 
-function App() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState(0);
-  const phoneHref = `tel:${profile.phone.replace(/\s+/g, '')}`;
-  const year = new Date().getFullYear();
-  const [brandFirst = profile.brand, brandLast = ''] = profile.brand.split(' ');
-  const brandInitials = profile.brand
-    .split(' ')
-    .map((part) => part[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
+function LogoLoop() {
+  const loopItems = [...logoItems, ...logoItems];
 
   return (
-    <>
-      <nav>
-        <a className="nav-brand" href="#top" onClick={() => setMenuOpen(false)}>
-          {brandFirst}
-          <span>.</span>
-          {brandLast}
-        </a>
+    <div className="logo-loop-shell mt-16 overflow-hidden rounded-full border border-white/10 bg-white/[0.035] py-3">
+      <div className="logo-loop-track">
+        {loopItems.map((item, index) => (
+          <div key={`${item.label}-${index}`} className="logo-loop-pill">
+            {item.icon ? (
+              <item.icon className="h-3.5 w-3.5" />
+            ) : (
+              <Circle className="h-2.5 w-2.5 fill-current stroke-none" />
+            )}
+            <span>{item.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
+function AntigravityField() {
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      {gravityNodes.map((node, index) => (
+        <motion.span
+          key={`${node.size}-${index}`}
+          className="antigravity-node"
+          style={{
+            width: node.size,
+            height: node.size,
+            top: node.top,
+            right: node.right,
+            bottom: node.bottom,
+            left: node.left,
+          }}
+          animate={{
+            y: [0, -18, 0],
+            x: [0, index % 2 === 0 ? 10 : -10, 0],
+            scale: [1, 1.16, 1],
+            opacity: [0.35, 0.85, 0.35],
+          }}
+          transition={{
+            duration: node.duration,
+            delay: node.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function LaserFlow({ className = "" }) {
+  return (
+    <div className={`laser-flow ${className}`}>
+      <span className="laser-beam laser-beam-a" />
+      <span className="laser-beam laser-beam-b" />
+      <span className="laser-beam laser-beam-c" />
+    </div>
+  );
+}
+
+function GradualBlurText({ children, className = "" }) {
+  return (
+    <div className={`gradual-blur-text ${className}`}>
+      <span className="gradual-blur-base">{children}</span>
+      <span aria-hidden="true" className="gradual-blur-clone">
+        {children}
+      </span>
+    </div>
+  );
+}
+
+function SpotlightCard({ children, className = "" }) {
+  const [spotlightStyle, setSpotlightStyle] = useState({
+    "--spot-x": "50%",
+    "--spot-y": "50%",
+    "--spot-opacity": 0,
+  });
+
+  const handleMove = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+    setSpotlightStyle({
+      "--spot-x": `${x}%`,
+      "--spot-y": `${y}%`,
+      "--spot-opacity": 1,
+    });
+  };
+
+  const handleLeave = () => {
+    setSpotlightStyle((current) => ({ ...current, "--spot-opacity": 0 }));
+  };
+
+  return (
+    <div
+      className={`spotlight-card ${className}`}
+      style={spotlightStyle}
+      onMouseMove={handleMove}
+      onMouseLeave={handleLeave}
+    >
+      {children}
+    </div>
+  );
+}
+
+function BorderGlow({ children, className = "" }) {
+  return <div className={`border-glow-shell ${className}`}>{children}</div>;
+}
+
+function SectionHeader({ eyebrow, title, copy }) {
+  return (
+    <div className="max-w-3xl">
+      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-300/80 sm:tracking-[0.36em]">
+        {eyebrow}
+      </p>
+      <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-white sm:text-5xl">{title}</h2>
+      <p className="mt-4 text-base leading-7 text-stone-300 sm:mt-5 sm:leading-8">{copy}</p>
+    </div>
+  );
+}
+
+function ProjectCard({ card, featured = false }) {
+  return (
+    <a
+      href={card.href}
+      target="_blank"
+      rel="noreferrer"
+      className={`group relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 transition duration-500 hover:-translate-y-1 hover:border-white/20 ${
+        featured ? "min-h-[20rem] sm:min-h-[25rem] lg:col-span-2" : "min-h-[18rem] sm:min-h-[22rem]"
+      }`}
+    >
+      <div className={`absolute inset-0 bg-gradient-to-br ${card.accent} opacity-90`} />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_30%)] opacity-60" />
+      <div className="relative flex h-full flex-col justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.32em] text-amber-100/90">{card.eyebrow}</p>
+          <h3 className="mt-5 max-w-md text-2xl font-semibold tracking-[-0.04em] text-white sm:text-3xl">
+            {card.title}
+          </h3>
+        </div>
+        <div>
+          <p className="max-w-lg text-base leading-7 text-stone-200/90 sm:leading-8">{card.description}</p>
+          <div className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white">
+            Projekt ansehen
+            <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+function FaqItem({ faq, isOpen, onToggle }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      className="faq-item relative overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04]"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <motion.div
+        className="pointer-events-none absolute inset-y-1 left-1 rounded-[1.6rem] bg-gradient-to-br from-amber-200/90 via-rose-200/85 to-orange-200/85"
+        animate={{
+          opacity: hovered || isOpen ? 1 : 0.72,
+          width: hovered || isOpen ? "34%" : "13rem",
+          filter: hovered || isOpen ? "saturate(1.08)" : "saturate(0.92)",
+        }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      />
+      <div className="relative m-1 overflow-hidden rounded-[1.7rem] bg-zinc-950/80 backdrop-blur-xl">
         <button
           type="button"
-          className={`nav-toggle ${menuOpen ? 'is-open' : ''}`}
-          aria-label="Navigation umschalten"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((current) => !current)}
+          onClick={onToggle}
+          className="relative grid w-full gap-4 px-6 py-6 text-left md:grid-cols-[minmax(0,0.45fr)_minmax(0,1fr)_auto] md:items-center"
         >
-          <span />
-          <span />
-        </button>
-
-        <div className={`nav-menu ${menuOpen ? 'is-open' : ''}`}>
-          <ul className="nav-links">
-            {navigation.map((item) => (
-              <li key={item.href}>
-                <a href={item.href} onClick={() => setMenuOpen(false)}>
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a
-            className="nav-cta"
-            href={`mailto:${profile.email}`}
-            onClick={() => setMenuOpen(false)}
+          <div className="relative z-10">
+            <p className="faq-meta text-[11px] font-semibold uppercase tracking-[0.3em]">
+              {faq.meta}
+            </p>
+          </div>
+          <span className="relative z-10 max-w-3xl text-lg font-semibold text-white md:text-[1.35rem]">
+            {faq.question}
+          </span>
+          <motion.span
+            animate={{ rotate: isOpen ? 45 : 0 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="relative z-10 justify-self-end text-2xl leading-none text-amber-200"
           >
-            Projekt anfragen
+            +
+          </motion.span>
+        </button>
+        <AnimatePresence initial={false}>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0, y: -10 }}
+              animate={{ height: "auto", opacity: 1, y: 0 }}
+              exit={{ height: 0, opacity: 0, y: -6 }}
+              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="grid gap-4 border-t border-white/8 px-6 pb-6 pt-2 md:grid-cols-[minmax(0,0.45fr)_minmax(0,1fr)]">
+                <div className="hidden md:block" />
+                <div className="faq-answer-panel max-w-3xl rounded-[1.5rem] border border-white/8 bg-white/[0.03] px-5 py-5 text-base leading-8 text-stone-300">
+                  {faq.answer}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [theme, setTheme] = useState("dark");
+  const [openFaq, setOpenFaq] = useState(0);
+  const [activeSection, setActiveSection] = useState(navItems[0].id);
+  const [themeWave, setThemeWave] = useState(null);
+  const [sparks, setSparks] = useState([]);
+  const themeToggleAnchorRef = useRef(null);
+  const timeoutRefs = useRef([]);
+
+  useEffect(() => {
+    const savedTheme = window.localStorage.getItem("portfolio-theme");
+    if (savedTheme === "light" || savedTheme === "dark") {
+      setTheme(savedTheme);
+      return;
+    }
+
+    const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    setTheme(prefersLight ? "light" : "dark");
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    window.localStorage.setItem("portfolio-theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    return () => {
+      timeoutRefs.current.forEach((timeoutId) => window.clearTimeout(timeoutId));
+    };
+  }, []);
+
+  useEffect(() => {
+    const sections = navItems
+      .map((item) => document.getElementById(item.id))
+      .filter(Boolean);
+
+    if (!sections.length) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visibleEntries[0]?.target?.id) {
+          setActiveSection(visibleEntries[0].target.id);
+        }
+      },
+      {
+        rootMargin: "-25% 0px -50% 0px",
+        threshold: [0.15, 0.3, 0.5, 0.7],
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
+  const emitSpark = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX || rect.left + rect.width / 2;
+    const y = event.clientY || rect.top + rect.height / 2;
+    const sparkId = `${Date.now()}-${Math.random()}`;
+    const spark = {
+      id: sparkId,
+      x,
+      y,
+      particles: Array.from({ length: 10 }, (_, index) => ({
+        angle: (Math.PI * 2 * index) / 10,
+        distance: 34 + (index % 3) * 16,
+      })),
+    };
+
+    setSparks((current) => [...current, spark]);
+
+    const sparkTimeout = window.setTimeout(() => {
+      setSparks((current) => current.filter((item) => item.id !== sparkId));
+    }, 700);
+
+    timeoutRefs.current.push(sparkTimeout);
+  };
+
+  const toggleTheme = () => {
+    const nextTheme = theme === "light" ? "dark" : "light";
+    const rect = themeToggleAnchorRef.current?.getBoundingClientRect();
+    const originX = rect ? rect.left + rect.width / 2 : window.innerWidth - 72;
+    const originY = rect ? rect.top + rect.height / 2 : 56;
+    const waveId = `${Date.now()}-${nextTheme}`;
+
+    setThemeWave({
+      id: waveId,
+      x: originX,
+      y: originY,
+      radius: Math.hypot(window.innerWidth, window.innerHeight),
+      theme: nextTheme,
+    });
+
+    const switchTimeout = window.setTimeout(() => {
+      startTransition(() => {
+        setTheme(nextTheme);
+      });
+    }, 180);
+
+    const clearTimeoutId = window.setTimeout(() => {
+      setThemeWave((current) => (current?.id === waveId ? null : current));
+    }, 1050);
+
+    timeoutRefs.current.push(switchTimeout, clearTimeoutId);
+  };
+
+  return (
+    <div className={`site-shell ${theme === "light" ? "theme-light" : "theme-dark"} min-h-screen`}>
+      <div className="site-bg pointer-events-none absolute inset-0 -z-20" />
+      <div className="site-grid pointer-events-none absolute inset-0 -z-10" />
+      <AnimatePresence>
+        {themeWave && (
+          <motion.div
+            key={themeWave.id}
+            className={`theme-wave-overlay ${themeWave.theme === "light" ? "theme-wave-light" : "theme-wave-dark"}`}
+            style={{
+              "--wave-x": `${themeWave.x}px`,
+              "--wave-y": `${themeWave.y}px`,
+            }}
+            initial={{ clipPath: `circle(0px at ${themeWave.x}px ${themeWave.y}px)`, opacity: 1 }}
+            animate={{
+              clipPath: `circle(${themeWave.radius}px at ${themeWave.x}px ${themeWave.y}px)`,
+              opacity: 1,
+            }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1] }}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {sparks.map((spark) => (
+          <div key={spark.id} className="click-spark-layer">
+            {spark.particles.map((particle, index) => (
+              <motion.span
+                key={`${spark.id}-${index}`}
+                className="click-spark-particle"
+                style={{ left: spark.x, top: spark.y }}
+                initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+                animate={{
+                  x: Math.cos(particle.angle) * particle.distance,
+                  y: Math.sin(particle.angle) * particle.distance,
+                  opacity: 0,
+                  scale: 0.25,
+                }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.58, ease: "easeOut" }}
+              />
+            ))}
+          </div>
+        ))}
+      </AnimatePresence>
+
+      <header className="site-header sticky top-0 z-50">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 lg:px-10 lg:py-4">
+          <a href="#top" className="font-heading text-sm uppercase tracking-[0.2em] text-white sm:text-lg sm:tracking-[0.24em]">
+            Martin Pokorny
           </a>
+          <div className="flex items-center gap-3">
+            <FlowingMenu activeSection={activeSection} theme={theme} />
+            <ThemeToggle theme={theme} onToggle={toggleTheme} anchorRef={themeToggleAnchorRef} />
+          </div>
         </div>
-      </nav>
+      </header>
 
       <main id="top">
-        <section className="hero-wrap hero">
-          <div className="hero-bg" />
-          <div className="hero-grid" />
-
-          <div className="section hero-content">
-            <span className="label">
-              Freelancer für Webdesign in Wiener Neustadt, Hosting & Technik
-            </span>
-            <h1>
-              Professionelles <span className="grad">Webdesign in Wiener Neustadt</span>{' '}
-              mit klarer Wirkung und technischer Umsetzung aus einer Hand.
-            </h1>
-            <p className="hero-sub">
-              Ich entwickle professionelle Websites für kleine Unternehmen,
-              Selbstständige und lokale Betriebe in Wiener Neustadt,
-              Niederösterreich und im DACH-Raum und unterstütze zusätzlich bei
-              Hosting, Deployment, Domains, SSL, Homelab-Themen und
-              individuellen technischen Lösungen im Hintergrund.
-            </p>
-
-            <div className="hero-btns">
-              <a className="btn btn-primary" href={`mailto:${profile.email}`}>
-                Projekt anfragen
-              </a>
-              <a
-                className="btn btn-secondary"
-                href={profile.github}
-                target="_blank"
-                rel="noreferrer"
-              >
-                GitHub ansehen
-              </a>
-              <a className="btn btn-secondary" href="#projekte">
-                Projekte ansehen
-              </a>
-            </div>
-
-            <div className="hero-stats">
-              {heroStats.map((item) => (
-                <div key={item.label} className="stat-item">
-                  <div className="stat-num">{item.value}</div>
-                  <div className="stat-label">{item.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section-full trust-strip">
-          <div className="trust-inner">
-            {heroHighlights.map((item) => (
-              <article key={item.title} className="trust-item">
-                <div className="trust-icon">{item.icon}</div>
-                <div>
-                  <div className="trust-title">{item.title}</div>
-                  <div className="trust-desc">{item.text}</div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="leistungen">
-          <SectionHeader
-            label="Leistungen"
-            title="Webdesign, Entwicklung und technische Unterstützung mit Business-Fokus"
-            text="Ich verbinde Gestaltung, Entwicklung und Infrastruktur so, dass am Ende nicht nur eine schöne Oberfläche entsteht, sondern eine professionelle Website oder technische Lösung, die zuverlässig funktioniert und sauber online geht."
-          />
-
-          <div className="services-grid">
-            {services.map((service) => (
-              <article
-                key={service.title}
-                className={`service-card ${service.tone === 'violet' ? 'purple' : ''}`}
-              >
-                <div className="service-num">{service.number}</div>
-                <span className={`service-icon tone-${service.tone}`}>{service.icon}</span>
-                <span className="service-mini-label">{service.label}</span>
-                <h3>{service.title}</h3>
-                <p>{service.text}</p>
-                <div className="service-tags">
-                  {service.tags.map((tag) => (
-                    <span key={tag} className="tag">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="inline-cta">
-            <div>
-              <h3>Keine schöne Hülle ohne saubere Umsetzung dahinter.</h3>
-              <p>
-                Wenn du eine moderne Website willst, aber die technische
-                Einrichtung, Hosting-Themen oder Homelab-nahe Unterstützung
-                nicht an mehreren Stellen koordinieren möchtest, ist ein
-                integrierter Ansatz meist die bessere Lösung.
-              </p>
-            </div>
-            <a className="btn btn-secondary" href="#technik">
-              Technik ansehen
-            </a>
-          </div>
-        </section>
-
-        <div className="section-divider" />
-
-        <section id="warum-ich">
-          <SectionHeader
-            label="Warum ich"
-            title="Eine Zusammenarbeit, die hochwertig wirkt und in der Praxis funktioniert"
-            text="Aus Kundensicht zählt nicht nur das Design, sondern ob ein Projekt strukturiert umgesetzt wird, technisch sauber läuft und ohne Reibung online geht."
-          />
-
-          <div className="why-grid">
-            {benefits.map((item, index) => (
-              <article key={item.title} className="why-item">
-                <div className="why-num">{String(index + 1).padStart(2, '0')}</div>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <div className="section-divider" />
-
-        <section id="ablauf">
-          <SectionHeader
-            label="Projektablauf"
-            title="Klarer Prozess statt chaotischer Einzelbaustellen"
-            text="Der Ablauf ist bewusst einfach gehalten: nachvollziehbar, professionell und kundenfreundlich. So bleibt das Projekt planbar und Entscheidungen werden nicht unnötig kompliziert."
-          />
-
-          <div className="process-steps">
-            {processSteps.map((item) => (
-              <article key={item.step} className="process-step">
-                <div className="step-num">{item.step}</div>
-                <div className="step-content">
-                  <span className="step-badge">{item.badge}</span>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <div className="section-divider" />
-
-        <section id="projekte">
-          <SectionHeader
-            label="Ausgewählte Projekte"
-            title="Reale Projekte aus Website-Betreuung, Umsetzung und technischer Praxis"
-            text="Hier siehst du konkrete Arbeiten aus meinem Alltag: laufend betreute Websites, eigene technische Projekte und weitere Codebeispiele auf GitHub."
-          />
-
-          <div className="projects-grid">
-            {projects.map((project) => (
-              <article key={project.title} className="project-card">
-                <div className={`project-thumb ${project.tone}`}>
-                  <span>{project.symbol}</span>
-                </div>
-                <div className="project-body">
-                  <div className="project-cat">{project.category}</div>
-                  <h3>{project.title}</h3>
-                  <p>{project.text}</p>
-                  <div className="project-result">{project.result}</div>
-                  <div className="project-tech">
-                    {project.tech.map((entry) => (
-                      <span key={entry} className="tag">
-                        {entry}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="project-links">
-                    {project.links.map((link) => (
-                      <a
-                        key={link.href}
-                        className="project-link"
-                        href={link.href}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        {link.label}
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <div className="projects-note">
-            <p>
-              Weitere Projekte, Experimente und technische Arbeiten findest du
-              auf meinem GitHub-Profil.
-            </p>
-            <a
-              className="btn btn-secondary"
-              href={profile.github}
-              target="_blank"
-              rel="noreferrer"
+        <section className="mx-auto grid min-h-[calc(100svh-84px)] max-w-7xl items-center gap-8 px-4 pb-14 pt-6 sm:px-6 sm:pb-20 sm:pt-8 lg:grid-cols-[1.05fr_0.95fr] lg:px-10">
+          <div className="relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+               className="hero-badge inline-flex max-w-full items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] sm:px-4 sm:text-[11px] sm:tracking-[0.32em]"
             >
-              GitHub-Profil öffnen
-            </a>
-          </div>
-        </section>
+              <Sparkles className="h-3.5 w-3.5" />
+              Webdesign Wiener Neustadt · Hosting · technische Lösungen
+            </motion.div>
 
-        <section className="section-full hosting-wrap" id="technik">
-          <div className="section-inner hosting-grid">
-            <div className="hosting-left">
-              <span className="label">Technik, Hosting & Deployment</span>
-              <h2>
-                Ich liefere keine halbfertige Website-Datei, sondern eine
-                funktionierende Gesamtlösung.
-              </h2>
-              <p>
-                Viele Webdesigner enden beim Layout oder beim Export. Ich
-                begleite auf Wunsch auch die technische Seite dahinter:
-                Hosting, Deployment, Domain-Anbindung, SSL, Reverse Proxy,
-                Server-Einrichtung und ein zuverlässiger Go-live gehören mit ins
-                Bild, wenn sie für das Projekt relevant sind.
-              </p>
+            <motion.h1
+              initial={{ opacity: 0, y: 26 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+               className="mt-6 max-w-5xl text-4xl font-semibold leading-[0.92] tracking-[-0.05em] text-white sm:mt-7 sm:text-7xl sm:leading-[0.88] sm:tracking-[-0.06em] lg:text-[7rem]"
+            >
+              Professionelle Websites
+              <span className="hero-gradient-title block bg-clip-text text-transparent">
+                für Unternehmen, Selbstständige und lokale Betriebe.
+              </span>
+            </motion.h1>
 
-              <div className="hosting-points">
-                {hostingPoints.map((point) => (
-                  <div key={point} className="hosting-point">
-                    {point}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <motion.p
+              initial={{ opacity: 0, y: 26 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+               className="mt-6 max-w-3xl text-base leading-7 text-stone-300 sm:mt-8 sm:text-xl sm:leading-8"
+            >
+              Ich bin Martin Pokorny aus Wiener Neustadt. Ich entwickle moderne Websites mit klarem visuellen
+              Anspruch und übernehme auf Wunsch auch Hosting, Deployment, SSL, Weiterleitungen, Reverse Proxy und
+              die technische Vorbereitung für einen zuverlässigen Go-live.
+            </motion.p>
 
-            <div className="hosting-right">
-              {hostingCards.map((card) => (
-                <article key={card.title} className="hosting-card">
-                  <div className="hosting-card-icon">{card.icon}</div>
-                  <h4>{card.title}</h4>
-                  <p>{card.text}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
+            <GradualBlurText className="mt-5 max-w-3xl text-xs uppercase tracking-[0.2em] text-stone-400 sm:mt-6 sm:text-sm sm:tracking-[0.28em]">
+              Design, Deployment und technische Ruhe statt Baukasten-Look.
+            </GradualBlurText>
 
-        <section id="zielgruppen">
-          <SectionHeader
-            label="Für wen ich arbeite"
-            title="Für Unternehmen und Menschen, die eine klare Lösung statt Bastelarbeit wollen"
-            text="Die Zusammenarbeit passt besonders gut, wenn du in Wiener Neustadt oder darüber hinaus eine moderne Website oder technische Unterstützung willst, aber Gestaltung, Technik und Go-live nicht auf mehrere Dienstleister aufteilen möchtest."
-          />
-
-          <div className="audience-grid">
-            {audiences.map((item) => (
-              <article key={item.title} className="audience-item">
-                <span className="audience-icon">{item.icon}</span>
-                <div>
-                  <h4>{item.title}</h4>
-                  <p>{item.text}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <div className="section-divider" />
-
-        <section className="section-full local-seo-wrap" id="wiener-neustadt">
-          <div className="section-inner local-seo-grid">
-            <div className="local-seo-copy">
-              <span className="label">Webdesign Wiener Neustadt</span>
-              <h2>
-                Professionelle Websites für Wiener Neustadt, Umgebung und
-                Unternehmen mit lokalem Anspruch.
-              </h2>
-              <p>
-                Ich arbeite als Freelancer für Webdesign in Wiener Neustadt und
-                unterstütze kleine Unternehmen, Selbstständige und lokale
-                Betriebe, die eine professionelle Website brauchen, die modern
-                aussieht, klar kommuniziert und technisch sauber live geht.
-              </p>
-              <p>
-                Gerade bei lokalen Projekten ist oft wichtig, dass nicht nur das
-                Design stimmt, sondern auch Hosting, Deployment, Domain, SSL
-                und die laufende Betreuung mitgedacht werden. Genau darauf ist
-                die Zusammenarbeit ausgelegt: direkt, pragmatisch und ohne
-                Agentur-Overhead.
-              </p>
-
-              <div className="local-focus-points">
-                {localFocusPoints.map((point) => (
-                  <div key={point} className="local-focus-point">
-                    {point}
-                  </div>
-                ))}
-              </div>
-
-              <a className="btn btn-primary" href={`mailto:${profile.email}`}>
-                Projekt in Wiener Neustadt anfragen
+            <motion.div
+              initial={{ opacity: 0, y: 26 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.24, ease: [0.22, 1, 0.36, 1] }}
+              className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:gap-4"
+            >
+              <a
+                href="#kontakt"
+                onClick={emitSpark}
+                className="hero-cta inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-stone-950 transition sm:w-auto"
+              >
+                Projekt anfragen
+                <ArrowUpRight className="h-4 w-4" />
               </a>
-            </div>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.07] sm:w-auto"
+              >
+                {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                {theme === "light" ? "Dark Mode" : "Light Mode"}
+              </button>
+            </motion.div>
 
-            <div className="local-seo-cards">
-              {localFocusCards.map((card) => (
-                <article key={card.title} className="local-seo-card">
-                  <span className="local-seo-badge">{card.badge}</span>
-                  <h3>{card.title}</h3>
-                  <p>{card.text}</p>
-                </article>
+            <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-2">
+              {heroFacts.map((fact, index) => (
+                <motion.div
+                  key={fact}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.55, delay: 0.28 + index * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                  className="hero-fact rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-xs leading-6 text-stone-300 sm:text-sm"
+                >
+                  {fact}
+                </motion.div>
               ))}
             </div>
           </div>
+
+          <div className="relative flex min-h-[28rem] items-center justify-center sm:min-h-[42rem]">
+            <AntigravityField />
+            <motion.div
+              animate={{ y: [0, -10, 0], rotate: [-8, -6, -8] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute left-0 top-12 hidden h-56 w-44 rounded-[2rem] border border-white/10 bg-[linear-gradient(180deg,rgba(251,191,36,0.14),rgba(255,255,255,0.04))] p-4 shadow-[0_30px_80px_rgba(0,0,0,0.35)] lg:block"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-200/90">Positionierung</p>
+              <p className="mt-5 text-2xl font-semibold text-white">Warm, klar, professionell.</p>
+              <div className="mt-8 grid grid-cols-3 gap-2">
+                <div className="h-12 rounded-2xl bg-amber-200/80" />
+                <div className="h-12 rounded-2xl bg-rose-200/70" />
+                <div className="h-12 rounded-2xl bg-orange-200/80" />
+              </div>
+            </motion.div>
+
+            <motion.div
+              animate={{ y: [0, 12, 0], rotate: [10, 8, 10] }}
+              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute bottom-8 right-0 hidden h-48 w-56 rounded-[2rem] border border-white/10 bg-[linear-gradient(160deg,rgba(244,63,94,0.16),rgba(255,255,255,0.04))] p-5 shadow-[0_30px_80px_rgba(0,0,0,0.35)] lg:block"
+            >
+              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-rose-100/90">Technik</p>
+              <div className="mt-5 space-y-3 text-sm text-stone-200/90">
+                <div className="rounded-2xl border border-white/8 bg-black/10 px-4 py-3">Hosting</div>
+                <div className="rounded-2xl border border-white/8 bg-black/10 px-4 py-3">Deployment</div>
+                <div className="rounded-2xl border border-white/8 bg-black/10 px-4 py-3">Reverse Proxy</div>
+              </div>
+            </motion.div>
+
+            <BorderGlow className="relative z-10 mx-auto w-full max-w-[36rem] rounded-[2.4rem]">
+              <SpotlightCard className="overflow-hidden rounded-[2.4rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-4 shadow-[0_40px_120px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:p-6">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_26%)] opacity-70" />
+                <div className="relative grid gap-5">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1.05fr_0.95fr]">
+                    <div className="rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(251,191,36,0.18),rgba(255,255,255,0.04))] p-5">
+                      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-amber-100/90">Leistung</p>
+                      <p className="mt-4 text-3xl font-semibold leading-tight text-white">
+                        Webdesign, Hosting und technische Umsetzung aus einer Hand.
+                      </p>
+                    </div>
+                    <div className="rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(244,63,94,0.16),rgba(255,255,255,0.04))] p-5">
+                      <p className="text-xs font-semibold uppercase tracking-[0.28em] text-rose-100/90">Fokus</p>
+                      <p className="mt-4 text-sm leading-7 text-stone-200/90">
+                        Webdesign in Wiener Neustadt für Unternehmen, Selbstständige und lokale Betriebe.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-[2rem] border border-white/10 bg-black/15 p-5">
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <div className="rounded-[1.5rem] bg-white/[0.04] p-4">
+                        <p className="text-3xl font-semibold text-white">12</p>
+                        <p className="mt-2 text-sm text-stone-400">öffentliche Repositories</p>
+                      </div>
+                      <div className="rounded-[1.5rem] bg-white/[0.04] p-4">
+                        <p className="text-3xl font-semibold text-white">3.</p>
+                        <p className="mt-2 text-sm text-stone-400">Jahrgang HTBLuVA</p>
+                      </div>
+                      <div className="rounded-[1.5rem] bg-white/[0.04] p-4">
+                        <p className="text-3xl font-semibold text-white">AT</p>
+                        <p className="mt-2 text-sm text-stone-400">Wiener Neustadt</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <div className="col-span-2 rounded-[1.6rem] border border-white/10 bg-amber-200/85 p-4 text-stone-950">
+                      <p className="text-xs font-semibold uppercase tracking-[0.28em]">Markenwirkung</p>
+                      <p className="mt-3 text-xl font-semibold">Editoriale Wärme</p>
+                    </div>
+                    <div className="look-chip rounded-[1.6rem] border border-white/10 bg-white/[0.06] p-4">
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-stone-400">Look</p>
+                      <p className="mt-3 text-sm font-semibold">Klar</p>
+                    </div>
+                    <div className="rounded-[1.6rem] border border-white/10 bg-rose-200/70 p-4 text-stone-950">
+                      <p className="text-xs font-semibold uppercase tracking-[0.22em]">Ton</p>
+                      <p className="mt-3 text-sm font-semibold">Präzise</p>
+                    </div>
+                  </div>
+                </div>
+              </SpotlightCard>
+            </BorderGlow>
+          </div>
         </section>
 
-        <div className="section-divider" />
+        <section className="logo-loop-section mx-auto max-w-7xl px-4 pb-6 sm:px-6 lg:px-10">
+          <div className="logo-loop-laser-accent pointer-events-none absolute right-10 top-[-8.5rem] z-0 hidden lg:block">
+            <LaserFlow className="laser-flow--logo-accent absolute inset-0" />
+            <span className="logo-loop-laser-column" />
+            <span className="logo-loop-laser-split logo-loop-laser-split-left" />
+            <span className="logo-loop-laser-split logo-loop-laser-split-right" />
+            <span className="logo-loop-laser-flare" />
+          </div>
+          <LogoLoop />
+        </section>
 
-        <section className="section seo-related-home">
-          <SectionHeader
-            label="Themen im Fokus"
-            title="Drei zusaetzliche Unterseiten fuer konkrete Suchanfragen und Leistungen"
-            text="Diese Seiten vertiefen wichtige Themen rund um Webdesign in Wiener Neustadt, Website Relaunches und technische Umsetzung mit Hosting, Deployment und Reverse Proxy."
-          />
-
-          <div className="seo-topic-grid">
-            {seoTopics.map((topic) => (
-              <article key={topic.key} className="seo-topic-card">
-                <span className="seo-topic-label">{topic.label}</span>
-                <h3>{topic.title}</h3>
-                <p>{topic.teaser}</p>
-                <a className="project-link" href={topic.href}>
-                  Unterseite ansehen
-                </a>
-              </article>
+        <section className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-10">
+          <div className="grid gap-4 rounded-[2rem] border border-white/10 bg-white/[0.03] p-4 sm:p-6 lg:grid-cols-3">
+            {proofItems.map((item) => (
+              <div key={item} className="rounded-[1.5rem] border border-white/8 bg-black/10 px-4 py-4 text-sm leading-7 text-stone-300">
+                {item}
+              </div>
             ))}
           </div>
         </section>
 
-        <div className="section-divider" />
-
-        <section id="ueber-mich">
-          <div className="about-grid">
-            <div className="about-avatar">
-              <div className="about-avatar-inner">
-                <strong>{brandInitials}</strong>
-                <span>{profile.responseNote}</span>
-              </div>
-            </div>
-
-            <div className="about-right">
-              <span className="label">Über mich</span>
-              <h2>
-                Ich verbinde Design, Entwicklung und technische Infrastruktur zu
-                klaren Lösungen.
-              </h2>
-              <p>
-                Ich entwickle moderne Websites für kleine Unternehmen,
-                Selbstständige und lokale Betriebe, besonders in Wiener
-                Neustadt und Umgebung, die professionell auftreten wollen und
-                dafür eine saubere Umsetzung brauchen.
-              </p>
-              <p>
-                Mich interessiert nicht nur, wie eine Website aussieht, sondern
-                auch, wie sie technisch betrieben wird, wie sie live geht und
-                wie sie im Alltag zuverlässig funktioniert. Deshalb verbinde ich
-                Gestaltung, Entwicklung und Infrastruktur zu einer
-                pragmatischen, lösungsorientierten Arbeitsweise.
-              </p>
-              <p>
-                Neben Webprojekten unterstütze ich auch bei Homelab-,
-                Self-Hosting- und Reverse-Proxy-Themen. Wenn technische Hilfe
-                praktisch gebraucht wird, arbeite ich remote per Call oder bei
-                passenden Projekten auch direkt vor Ort.
-              </p>
-
-              <div className="about-skills">
-                <span className="tag">Webdesign</span>
-                <span className="tag">Development</span>
-                <span className="tag">Hosting</span>
-                <span className="tag">Deployment</span>
-                <span className="tag">Homelab</span>
-                <span className="tag">Technical Solutions</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="section-divider" />
-
-        <section id="faq">
+        <section id="leistungen" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-10">
           <SectionHeader
-            label="FAQ"
-            title="Häufige Fragen vor Projektstart"
-            text="Die häufigsten Punkte drehen sich um Aufwand, Timing, technische Betreuung und die Frage, wie individuell eine Lösung werden kann."
+            eyebrow="Leistungen"
+            title="Was ich für deine Website übernehmen kann."
+            copy="Die Seite soll nicht nur optisch stark sein, sondern auch im Alltag funktionieren. Genau darum kombiniere ich Webdesign mit Hosting, Deployment und technischer Umsetzung."
           />
 
-          <div className="faq-list">
-            {faqItems.map((item, index) => {
-              const isOpen = openFaq === index;
+          <div className="mt-10 grid gap-6 sm:mt-14 lg:grid-cols-3">
+            {serviceCards.map((service) => {
+              const Icon = service.icon;
+
               return (
-                <article
-                  key={item.question}
-                  className={`faq-item ${isOpen ? 'open' : ''}`}
-                >
-                  <button
-                    type="button"
-                    className="faq-q"
-                    onClick={() => setOpenFaq(isOpen ? -1 : index)}
-                  >
-                    <span>{item.question}</span>
-                    <span className="faq-icon">+</span>
-                  </button>
-                  <div className="faq-a">{item.answer}</div>
-                </article>
+                <BorderGlow key={service.title} className="rounded-[1.9rem]">
+                  <SpotlightCard className="rounded-[1.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.055),rgba(255,255,255,0.02))] p-6 sm:p-7">
+                    <div className="relative">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/[0.06] text-amber-200">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                       <h3 className="mt-5 text-xl font-semibold tracking-tight text-white sm:text-2xl">{service.title}</h3>
+                       <p className="mt-4 text-base leading-7 text-stone-300 sm:leading-8">{service.copy}</p>
+                    </div>
+                  </SpotlightCard>
+                </BorderGlow>
               );
             })}
           </div>
         </section>
 
-        <section className="cta-final" id="kontakt">
-          <div className="cta-final-bg" />
-          <div className="cta-final-inner">
-            <span className="label">Kontakt</span>
-            <h2>
-              Bereit für eine Website, die nicht nur gut aussieht, sondern
-              zuverlässig funktioniert?
-            </h2>
-            <p>
-              Wenn du in Wiener Neustadt oder darüber hinaus eine moderne
-              Website, Unterstützung bei Hosting und Deployment oder Hilfe bei
-              Homelab- und Reverse-Proxy-Themen brauchst, lass uns kurz
-              sprechen.
-            </p>
-            <div className="cta-btns">
-              <a className="btn btn-primary" href={`mailto:${profile.email}`}>
-                E-Mail schreiben
+        <section id="projekte" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-10">
+          <SectionHeader
+            eyebrow="Projekte"
+            title="Öffentliche Arbeiten und technische Spuren."
+            copy="Deine Portfolio-Seite soll wieder mehr nach echter Arbeit aussehen. Deshalb zeige ich hier nicht nur Links, sondern sichtbare technische Richtung, reale Repositories und nachvollziehbare Schwerpunkte."
+          />
+
+          <div className="mt-10 grid gap-6 sm:mt-14 lg:grid-cols-3">
+            {projectCards.map((card, index) => (
+              <ProjectCard key={card.title} card={card} featured={index === 0} />
+            ))}
+          </div>
+        </section>
+
+        <section id="ablauf" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-10">
+          <SectionHeader
+            eyebrow="Ablauf"
+            title="So entsteht aus einer Idee eine professionelle Website."
+            copy="Gerade bei kleinen Unternehmen und Selbstständigen ist ein klarer Ablauf wichtig: schnell entscheiden, sauber umsetzen, stressfrei live gehen."
+          />
+
+          <div className="mt-10 grid gap-6 sm:mt-14 lg:grid-cols-2">
+            {processSteps.map((step) => (
+              <BorderGlow key={step.number} className="rounded-[1.9rem]">
+                <div className="rounded-[1.9rem] border border-white/10 bg-white/[0.04] p-6 sm:p-7">
+                  <p className="text-sm font-semibold uppercase tracking-[0.32em] text-amber-200/85">{step.number}</p>
+                   <h3 className="mt-4 text-xl font-semibold text-white sm:text-2xl">{step.title}</h3>
+                   <p className="mt-4 text-base leading-7 text-stone-300 sm:leading-8">{step.copy}</p>
+                </div>
+              </BorderGlow>
+            ))}
+          </div>
+        </section>
+
+        <section id="faq" className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-10">
+          <SectionHeader
+            eyebrow="Wichtigste Fragen"
+            title="Die wichtigsten Fragen vor einem Projektstart."
+            copy="Beim Hover bekommt jede Frage mehr Präsenz, beim Klick öffnet sie sich weich und klar lesbar. So wirkt der Bereich näher an einem starken React-Snippet statt wie ein Standard-Accordion."
+          />
+
+          <div className="mt-10 grid gap-4 sm:mt-14">
+            {faqs.map((faq, index) => (
+              <FaqItem
+                key={faq.question}
+                faq={faq}
+                isOpen={openFaq === index}
+                onToggle={(event) => {
+                  emitSpark(event);
+                  setOpenFaq((current) => (current === index ? -1 : index));
+                }}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section id="kontakt" className="mx-auto max-w-7xl px-4 pb-14 pt-16 sm:px-6 sm:pb-18 sm:pt-24 lg:px-10">
+          <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+            <BorderGlow className="rounded-[2.2rem]">
+              <div className="rounded-[2.2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-8 sm:p-10 lg:p-12">
+                <p className="text-xs font-semibold uppercase tracking-[0.34em] text-rose-200/85">Kontakt</p>
+                <h2 className="mt-5 max-w-3xl text-3xl font-semibold tracking-[-0.05em] text-white sm:text-6xl">
+                  Bereit für eine Website, die professionell aussieht und auch professionell live geht?
+                </h2>
+                <p className="mt-6 max-w-2xl text-base leading-8 text-stone-300">
+                  Wenn du eine moderne Website, einen Relaunch oder technische Hilfe bei Hosting, Deployment und
+                  Infrastruktur brauchst, können wir darauf aufsetzen.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a
+                    href="mailto:martinkopoky@gmail.com"
+                    onClick={emitSpark}
+                    className="hero-cta inline-flex w-full items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-stone-950 transition sm:w-auto"
+                  >
+                    Projekt anfragen
+                <ArrowUpRight className="h-4 w-4" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.07] sm:w-auto"
+                  >
+                    {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                    {theme === "light" ? "Dunkler ansehen" : "Heller ansehen"}
+                  </button>
+                </div>
+              </div>
+            </BorderGlow>
+
+            <div className="grid gap-4">
+              <a
+                href="mailto:martinkopoky@gmail.com"
+                className="group rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-6 transition hover:bg-white/[0.07]"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-200/85">E-Mail</p>
+                    <p className="mt-3 break-all text-lg font-semibold text-white sm:text-2xl">
+                      martinkopoky@gmail.com
+                    </p>
+                  </div>
+                  <Mail className="h-5 w-5 text-stone-300 transition group-hover:text-white" />
+                </div>
               </a>
-              <a className="btn btn-secondary" href={phoneHref}>
-                Anrufen
+
+              <a
+                href="tel:+436504116441"
+                className="group rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-6 transition hover:bg-white/[0.07]"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-rose-200/85">Telefon</p>
+                    <p className="mt-3 text-xl font-semibold text-white sm:text-2xl">+43 650 4116441</p>
+                  </div>
+                  <Phone className="h-5 w-5 text-stone-300 transition group-hover:text-white" />
+                </div>
               </a>
-            </div>
-            <div className="contact-inline">
-              <a href={`mailto:${profile.email}`}>{profile.email}</a>
-              <a href={phoneHref}>{profile.phone}</a>
-              <a href={profile.github} target="_blank" rel="noreferrer">
-                GitHub: {profile.githubHandle}
+
+              <a
+                href="https://github.com/Grufyeti"
+                target="_blank"
+                rel="noreferrer"
+                className="group rounded-[1.8rem] border border-white/10 bg-white/[0.05] p-6 transition hover:bg-white/[0.07]"
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-200/85">GitHub</p>
+                    <p className="mt-3 break-all text-lg font-semibold text-white sm:text-2xl">
+                      github.com/Grufyeti
+                    </p>
+                  </div>
+                  <SquareTerminal className="h-5 w-5 text-stone-300 transition group-hover:text-white" />
+                </div>
               </a>
-              <span>{profile.location}</span>
             </div>
           </div>
         </section>
       </main>
 
-      <footer>
-        <div className="footer-inner">
-          <div className="footer-top">
-            <div>
-              <div className="footer-brand">
-                {brandFirst}
-                <span>.</span>
-                {brandLast}
-              </div>
-              <p className="footer-tagline">
-                {profile.title} für professionelle Online-Auftritte mit klarer
-                Wirkung, sauberer Umsetzung, verlässlichem Go-live und
-                praxisnaher technischer Unterstützung.
-              </p>
-            </div>
-
-            <div className="footer-col">
-              <h5>Navigation</h5>
-              <ul className="footer-links">
-                {navigation.map((item) => (
-                  <li key={item.href}>
-                    <a href={item.href}>{item.label}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="footer-col">
-              <h5>Kontakt</h5>
-              <ul className="footer-links">
-                <li>
-                  <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                </li>
-                <li>
-                  <a href={phoneHref}>{profile.phone}</a>
-                </li>
-                <li>
-                  <a href={profile.github} target="_blank" rel="noreferrer">
-                    github.com/{profile.githubHandle}
-                  </a>
-                </li>
-                <li>{profile.location}</li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="footer-bottom">
-            <span>© {year} {profile.brand}. Alle Rechte vorbehalten.</span>
-            <span>Webdesign, Entwicklung, Hosting und technische Lösungen.</span>
+      <footer className="mx-auto max-w-7xl px-4 pb-10 pt-6 text-sm text-stone-500 sm:px-6 lg:px-10">
+        <div className="flex flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+          <p>Martin Pokorny · Webdesign, Hosting und technische Lösungen aus Wiener Neustadt</p>
+          <div className="flex gap-4">
+            <a href="mailto:martinkopoky@gmail.com" className="hover:text-stone-300">
+              E-Mail
+            </a>
+            <a href="https://github.com/Grufyeti" target="_blank" rel="noreferrer" className="hover:text-stone-300">
+              GitHub
+            </a>
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
-
-export default App;
